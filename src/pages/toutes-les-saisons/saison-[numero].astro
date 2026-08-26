@@ -1,0 +1,235 @@
+---
+import { Image } from 'astro:assets';
+
+import EditionVisuals from '../../components/EditionVisuals.astro';
+import Lightbox from '../../components/Lightbox.astro';
+import Photo from '../../components/Photo.astro';
+import Base from '../../layouts/Base.astro';
+import { schemaSaison } from '../../lib/schema';
+import { NARRATION, seasons, typo, type Season } from '../../lib/seasons';
+
+export function getStaticPaths() {
+  return seasons.map((season, index) => ({
+    params: { numero: String(season.number) },
+    props: {
+      season,
+      previous: seasons[index - 1],
+      next: seasons[index + 1],
+    },
+  }));
+}
+
+interface Props {
+  season: Season;
+  previous?: Season;
+  next?: Season;
+}
+
+const { season, previous, next } = Astro.props;
+const cover = season.editions.find((e) => e.packshot)?.packshot;
+
+const description = season.resume
+  ? `${season.resume.slice(0, 150).trimEnd()}…`
+  : `La saison ${season.number} de New York Police Judiciaire en coffret DVD et Blu-ray.`;
+---
+
+<Base
+  title={`Saison ${season.number} (${season.years}) — New York Police Judiciaire | Law&Order.shop`}
+  description={description}
+  path="/toutes-les-saisons/"
+  image={cover}
+  schema={schemaSaison(season)}
+>
+  <div class="page">
+    <section class="season-hero">
+      <div>
+        <p class="eyebrow">Intégrale saison {season.number}</p>
+        <h1>Saison {season.number}</h1>
+        <p class="season-hero__years">
+          {season.years}{season.episodeCount && ` · ${season.episodeCount} épisodes`}
+        </p>
+        {season.resume && <p class="stack">{season.resume}</p>}
+      </div>
+      {
+        cover && (
+          <div class="season-hero__art" data-parallax="10">
+            <Image
+              src={cover}
+              alt={`Coffret de la saison ${season.number} de New York Police Judiciaire`}
+              widths={[360, 600, 900]}
+              sizes="(min-width: 52em) 32rem, 85vw"
+              loading="eager"
+            />
+          </div>
+        )
+      }
+    </section>
+  </div>
+
+  {
+    season.accrocheSecondaire && (
+      <section class="page section">
+        <p class="eyebrow">Ce que change cette saison</p>
+        <div class="prose">
+          <p>{season.accrocheSecondaire}</p>
+        </div>
+      </section>
+    )
+  }
+
+  <section class="page section">
+    <p class="eyebrow">Les éditions</p>
+    <h2 class="section-title">Coffrets disponibles</h2>
+    <div class="editions stack--wide" data-reveal-group>
+      {
+        season.editions.map((edition) => (
+          <article class="edition" data-reveal>
+            <h3>{edition.label}</h3>
+            <EditionVisuals edition={edition} contexte={`saison ${season.number}`} />
+            <dl>
+              {edition.technique && (
+                <>
+                  <dt>Caractéristiques</dt>
+                  <dd>
+                    <ul>
+                      {edition.technique.map((line) => (
+                        <li>{line}</li>
+                      ))}
+                    </ul>
+                  </dd>
+                </>
+              )}
+              {edition.supplements && (
+                <>
+                  <dt>Bonus</dt>
+                  <dd>
+                    <ul>
+                      {edition.supplements.map((item) => (
+                        <li>{item}</li>
+                      ))}
+                    </ul>
+                  </dd>
+                </>
+              )}
+              {edition.ean && (
+                <>
+                  <dt>Code EAN</dt>
+                  <dd>{edition.ean}</dd>
+                </>
+              )}
+            </dl>
+            {edition.url && (
+              <a class="button button--solid" href={edition.url} rel="noopener">
+                Commander le {edition.label}
+              </a>
+            )}
+          </article>
+        ))
+      }
+    </div>
+    <p class="note">
+      Les commandes sont traitées par Elephant Films, éditeur de la série en France.
+    </p>
+  </section>
+
+  {
+    season.starring.length > 0 && (
+      <section class="page section">
+        <p class="eyebrow">Distribution</p>
+        <h2 class="section-title">Les rôles principaux</h2>
+        <ul class="cast stack--wide" data-reveal-group>
+          {season.starring.map((role) => (
+            <li class="cast__role" data-reveal>
+              <p class="cast__actor">{role.acteur}</p>
+              <p class="cast__character">{typo(role.role)}</p>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+
+  {
+    season.episodes.length > 0 && (
+      <section class="page section">
+        <p class="eyebrow">Guide des épisodes</p>
+        <h2 class="section-title">Les {season.episodes.length} épisodes</h2>
+        <ol class="episodes stack--wide">
+          {season.episodes.map((episode) => (
+            <li class="episode" id={`episode-${episode.numero}`} data-reveal>
+              <p class="episode__number">Épisode {episode.numero}</p>
+              <div>
+                <h3 class="episode__title">{episode.titre}</h3>
+                <p class="episode__meta">
+                  {[
+                    episode.titreVo,
+                    episode.diffusion && `${episode.diffusion.chaine}, ${episode.diffusion.date}`,
+                    ...episode.credits,
+                  ]
+                    .filter(Boolean)
+                    .join(' · ')}
+                </p>
+                {episode.resume && <p class="episode__resume">{episode.resume}</p>}
+                {episode.images.length > 0 && (
+                  <ul class="episode__images">
+                    {episode.images.map((image) => (
+                      <li>
+                        <Photo
+                          src={image}
+                          alt={`Épisode ${episode.numero} de la saison ${season.number}, ${episode.titre}`}
+                          widths={[280, 460, 640]}
+                          sizes="(min-width: 46em) 16rem, 45vw"
+                        />
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                {episode.casting && <p class="episode__cast">Avec {episode.casting}</p>}
+                {episode.notes.length > 0 && (
+                  <details class="episode__notes">
+                    <summary>À noter</summary>
+                    {episode.notes.map((note) => (
+                      <p>{note}</p>
+                    ))}
+                  </details>
+                )}
+              </div>
+            </li>
+          ))}
+        </ol>
+      </section>
+    )
+  }
+
+  {
+    season.photos.length > 0 && (
+      <section class="page section">
+        <p class="eyebrow">Images de la saison</p>
+        <ul class="gallery stack" data-reveal-group>
+          {season.photos.map((image, i) => (
+            <li data-reveal="clip">
+              <Photo
+                src={image}
+                alt={`Scène de la saison ${season.number} de New York Police Judiciaire`}
+                widths={[400, 700, 1000]}
+                sizes="(min-width: 64em) 24rem, (min-width: 40em) 45vw, 90vw"
+                loading={i < 2 ? 'eager' : 'lazy'}
+              />
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+
+  <section class="page section">
+    <p class="narration">{NARRATION}</p>
+    <nav class="season-pager stack--wider" aria-label="Saisons voisines">
+      {previous ? <a href={previous.href}>← Saison {previous.number}</a> : <span />}
+      <a href="/toutes-les-saisons/">Toutes les saisons</a>
+      {next ? <a href={next.href}>Saison {next.number} →</a> : <span />}
+    </nav>
+  </section>
+
+  <Lightbox />
+</Base>

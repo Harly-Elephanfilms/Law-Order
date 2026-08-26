@@ -1,0 +1,67 @@
+---
+/**
+ * Pas de formulaire : un site statique n’a rien pour recevoir un envoi, et le
+ * brancher sur un service tiers ferait transiter les messages — donc des
+ * données personnelles — par un intermédiaire, pour un gain nul face à une
+ * adresse électronique.
+ */
+import Base from '../layouts/Base.astro';
+---
+
+<Base
+  title="Contact | Law&Order.shop"
+  description="À qui écrire selon votre demande : commandes et livraison chez Elephant Films, éditeur des coffrets ; contenu du site chez son opérateur."
+  path="/contact/"
+>
+  <section class="page section">
+    <p class="eyebrow">Contact</p>
+    <h1 class="section-title">À qui s’adresser</h1>
+    <p class="lede">
+      Les coffrets sont édités et vendus par Elephant Films. Selon votre demande, votre
+      interlocuteur n’est pas le même.
+    </p>
+
+    <div class="editions stack--wide">
+      <article class="edition">
+        <h2>Commandes et livraison</h2>
+        <p>
+          Une commande, un délai, un colis, un échange : tout cela relève d’Elephant Films, qui
+          édite les coffrets et traite les ventes.
+        </p>
+        <dl>
+          <dt>Courriel</dt>
+          <dd><a href="mailto:contact@elephantfilms.com">contact@elephantfilms.com</a></dd>
+          <dt>Téléphone</dt>
+          <dd><a href="tel:+33155171616">01 55 17 16 16</a></dd>
+          <dt>Adresse</dt>
+          <dd>3 bis rue du Docteur Foucault<br />92000 Nanterre</dd>
+        </dl>
+        <a class="button button--solid" href="https://www.elephantfilms.com/" rel="noopener">
+          La boutique Elephant Films
+        </a>
+      </article>
+
+      <article class="edition">
+        <h2>Le site et son contenu</h2>
+        <p>
+          Une erreur dans une fiche, une image manquante, une question sur les textes publiés ici :
+          écrivez à l’opérateur du site.
+        </p>
+        <dl>
+          <dt>Courriel</dt>
+          <dd><a href="mailto:contact@elephantfilms.com">contact@elephantfilms.com</a></dd>
+          <dt>Opérateur</dt>
+          <dd>
+            Elysées Editions et Communication<br />43 bis rue Henri Barbusse<br />92000 Nanterre
+          </dd>
+        </dl>
+        <a class="button" href="/mention-legale/">Mentions légales</a>
+      </article>
+    </div>
+
+    <p class="note">
+      Ce site ne comporte pas de formulaire : il ne collecte donc aucune donnée personnelle et ne
+      dépose aucun traceur.
+    </p>
+  </section>
+</Base>

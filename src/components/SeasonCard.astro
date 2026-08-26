@@ -1,0 +1,38 @@
+---
+import { Image } from 'astro:assets';
+
+import type { Season } from '../lib/seasons';
+
+interface Props {
+  season: Season;
+  /** La première carte de la grille est visible d’emblée : on la charge sans différer. */
+  eager?: boolean;
+}
+
+const { season, eager = false } = Astro.props;
+const cover = season.editions.find((e) => e.packshot)?.packshot;
+const supports = season.editions.map((e) => e.label).join(' · ');
+---
+
+<li data-reveal>
+  <a class="season-card" href={season.href}>
+    <div class="season-card__art">
+      {
+        cover && (
+          <Image
+            src={cover}
+            alt={`Coffret de la saison ${season.number} de New York Police Judiciaire`}
+            widths={[240, 480, 720]}
+            sizes="(min-width: 64em) 20rem, (min-width: 40em) 33vw, 80vw"
+            loading={eager ? 'eager' : 'lazy'}
+          />
+        )
+      }
+    </div>
+    <h3 class="season-card__number">Saison {season.number}</h3>
+    <p class="season-card__meta">
+      {season.years}{season.episodeCount && ` · ${season.episodeCount} épisodes`}{supports && ` · ${supports}`}
+    </p>
+    {season.resume && <p class="season-card__teaser">{season.resume}</p>}
+  </a>
+</li>

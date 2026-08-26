@@ -1,0 +1,85 @@
+---
+/**
+ * Les textes de fond des deux documents de travail : le livret de l’intégrale
+ * des saisons 6 à 10, et le guide des épisodes des saisons 11 à 15. Extraits
+ * par scripts/build_essay.py.
+ */
+import Base from '../layouts/Base.astro';
+import essay from '../data/essay.json';
+import { typo } from '../lib/seasons';
+
+interface Bloc {
+  type: 'titre' | 'paragraphe';
+  texte: string;
+}
+
+interface Partie {
+  titre: string;
+  soustitre: string;
+  source: string;
+  blocs: Bloc[];
+}
+
+const parties = essay as Partie[];
+
+const ancre = (titre: string) =>
+  titre
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+
+/** Les intitulés en capitales ouvrent une partie ; les autres, une section. */
+const estIntitule = (texte: string) => texte === texte.toUpperCase() && !texte.includes('/');
+---
+
+<Base
+  title="La série — New York Police Judiciaire | Law&Order.shop"
+  description="Comment New York Police Judiciaire a bâti sa mythologie : crossovers et séries dérivées, entrées et sorties de la distribution, portraits des personnages et des acteurs."
+  path="/la-serie/"
+>
+  <div class="page">
+    <section class="section">
+      <p class="eyebrow">La série</p>
+      <h1 class="hero-title">Voici leurs histoires</h1>
+      <p class="lede">
+        Deux textes repris des documents d’édition des coffrets, sur la série et sur ceux qui
+        l’ont faite.
+      </p>
+      <ol class="sommaire stack--wide" data-reveal-group>
+        {
+          parties.map((partie) => (
+            <li data-reveal>
+              <a href={`#${ancre(partie.titre)}`}>{typo(partie.titre)}</a>
+              <span>{typo(partie.soustitre)}</span>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+  </div>
+
+  {
+    parties.map((partie) => (
+      <section class="page section">
+        <p class="eyebrow" data-reveal>{partie.source}</p>
+        <h2 class="section-title" id={ancre(partie.titre)} data-reveal>
+          {typo(partie.titre)}
+        </h2>
+        <p class="lede" data-reveal>{typo(partie.soustitre)}</p>
+        <div class="prose article stack--wide">
+          {partie.blocs.map((bloc) =>
+            bloc.type === 'paragraphe' ? (
+              <p>{typo(bloc.texte)}</p>
+            ) : estIntitule(bloc.texte) ? (
+              <h4 class="article__section">{typo(bloc.texte)}</h4>
+            ) : (
+              <h3 class="article__partie">{typo(bloc.texte)}</h3>
+            ),
+          )}
+        </div>
+      </section>
+    ))
+  }
+</Base>

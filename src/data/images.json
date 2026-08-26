@@ -1,0 +1,422 @@
+{
+  "seasons": {
+    "1": {
+      "packshots": {
+        "dvd": "packshots/s1-dvd.webp",
+        "bluray": "packshots/s1-bluray.webp"
+      },
+      "dos": {
+        "dvd": "dos/s1-dvd-dos.webp",
+        "bluray": "dos/s1-bluray-dos.webp"
+      },
+      "photos": [
+        "photos/s1-1.webp",
+        "photos/s1-2.webp",
+        "photos/s1-3.webp",
+        "photos/s1-4.webp",
+        "photos/s1-5.webp"
+      ],
+      "episodes": {}
+    },
+    "2": {
+      "packshots": {
+        "dvd": "packshots/s2-dvd.webp",
+        "bluray": "packshots/s2-bluray.webp"
+      },
+      "dos": {
+        "dvd": "dos/s2-dvd-dos.webp",
+        "bluray": "dos/s2-bluray-dos.webp"
+      },
+      "photos": [
+        "photos/s2-1.webp",
+        "photos/s2-2.webp",
+        "photos/s2-3.webp",
+        "photos/s2-4.webp",
+        "photos/s2-5.webp"
+      ],
+      "episodes": {}
+    },
+    "3": {
+      "packshots": {
+        "dvd": "packshots/s3-dvd.webp",
+        "bluray": "packshots/s3-bluray.webp"
+      },
+      "dos": {
+        "dvd": "dos/s3-dvd-dos.webp",
+        "bluray": "dos/s3-bluray-dos.webp"
+      },
+      "photos": [
+        "photos/s3-1.webp",
+        "photos/s3-2.webp",
+        "photos/s3-3.webp",
+        "photos/s3-4.webp",
+        "photos/s3-5.webp",
+        "photos/s3-6.webp"
+      ],
+      "episodes": {}
+    },
+    "4": {
+      "packshots": {
+        "dvd": "packshots/s4-dvd.webp",
+        "bluray": "packshots/s4-bluray.webp"
+      },
+      "dos": {
+        "dvd": "dos/s4-dvd-dos.webp",
+        "bluray": "dos/s4-bluray-dos.webp"
+      },
+      "photos": [
+        "photos/s4-1.webp",
+        "photos/s4-2.webp",
+        "photos/s4-3.webp",
+        "photos/s4-4.webp",
+        "photos/s4-5.webp"
+      ],
+      "episodes": {}
+    },
+    "5": {
+      "packshots": {
+        "dvd": "packshots/s5-dvd.webp",
+        "bluray": "packshots/s5-bluray.webp"
+      },
+      "dos": {
+        "dvd": "dos/s5-dvd-dos.webp",
+        "bluray": "dos/s5-bluray-dos.webp"
+      },
+      "photos": [
+        "photos/s5-1.webp",
+        "photos/s5-2.webp",
+        "photos/s5-3.webp",
+        "photos/s5-4.webp",
+        "photos/s5-5.webp"
+      ],
+      "episodes": {}
+    },
+    "6": {
+      "packshots": {
+        "dvd": "packshots/s6-dvd.webp",
+        "bluray": "packshots/s6-bluray.webp"
+      },
+      "dos": {
+        "dvd": "dos/s6-dvd-dos.webp",
+        "bluray": "dos/s6-bluray-dos.webp"
+      },
+      "photos": [
+        "photos/s6-1.webp",
+        "photos/s6-2.webp",
+        "photos/s6-3.webp",
+        "photos/s6-4.webp",
+        "photos/s6-5.webp"
+      ],
+      "episodes": {
+        "5": [
+          "episodes/s6-e5-1.webp"
+        ],
+        "6": [
+          "episodes/s6-e6-1.webp"
+        ],
+        "17": [
+          "episodes/s6-e17-1.webp"
+        ],
+        "19": [
+          "episodes/s6-e19-1.webp"
+        ],
+        "23": [
+          "episodes/s6-e23-1.webp"
+        ]
+      }
+    },
+    "7": {
+      "packshots": {
+        "dvd": "packshots/s7-dvd.webp",
+        "bluray": "packshots/s7-bluray.webp"
+      },
+      "dos": {
+        "dvd": "dos/s7-dvd-dos.webp",
+        "bluray": "dos/s7-bluray-dos.webp"
+      },
+      "photos": [
+        "photos/s7-1.webp",
+        "photos/s7-2.webp",
+        "photos/s7-3.webp",
+        "photos/s7-4.webp",
+        "photos/s7-5.webp"
+      ],
+      "episodes": {}
+    },
+    "8": {
+      "packshots": {
+        "dvd": "packshots/s8-dvd.webp",
+        "bluray": "packshots/s8-bluray.webp"
+      },
+      "dos": {
+        "dvd": "dos/s8-dvd-dos.webp",
+        "bluray": "dos/s8-bluray-dos.webp"
+      },
+      "photos": [
+        "photos/s8-1.webp",
+        "photos/s8-2.webp",
+        "photos/s8-3.webp",
+        "photos/s8-4.webp",
+        "photos/s8-5.webp"
+      ],
+      "episodes": {}
+    },
+    "9": {
+      "packshots": {
+        "dvd": "packshots/s9-dvd.webp",
+        "bluray": "packshots/s9-bluray.webp"
+      },
+      "dos": {
+        "dvd": "dos/s9-dvd-dos.webp",
+        "bluray": "dos/s9-bluray-dos.webp"
+      },
+      "photos": [
+        "photos/s9-1.webp",
+        "photos/s9-2.webp",
+        "photos/s9-3.webp",
+        "photos/s9-4.webp",
+        "photos/s9-5.webp"
+      ],
+      "episodes": {}
+    },
+    "10": {
+      "packshots": {
+        "dvd": "packshots/s10-dvd.webp",
+        "bluray": "packshots/s10-bluray.webp"
+      },
+      "dos": {
+        "dvd": "dos/s10-dvd-dos.webp",
+        "bluray": "dos/s10-bluray-dos.webp"
+      },
+      "photos": [
+        "photos/s10-1.webp",
+        "photos/s10-2.webp",
+        "photos/s10-3.webp",
+        "photos/s10-4.webp",
+        "photos/s10-5.webp"
+      ],
+      "episodes": {}
+    },
+    "11": {
+      "packshots": {
+        "dvd": "packshots/s11-dvd.webp",
+        "bluray": "packshots/s11-bluray.webp"
+      },
+      "dos": {
+        "dvd": "dos/s11-dvd-dos.webp",
+        "bluray": "dos/s11-bluray-dos.webp"
+      },
+      "photos": [
+        "photos/s11-1.webp",
+        "photos/s11-2.webp",
+        "photos/s11-3.webp",
+        "photos/s11-4.webp",
+        "photos/s11-5.webp",
+        "photos/s11-6.webp"
+      ],
+      "episodes": {
+        "1": [
+          "episodes/s11-e1-1.webp",
+          "episodes/s11-e1-2.webp"
+        ],
+        "2": [
+          "episodes/s11-e2-1.webp",
+          "episodes/s11-e2-2.webp"
+        ],
+        "3": [
+          "episodes/s11-e3-1.webp",
+          "episodes/s11-e3-2.webp"
+        ],
+        "4": [
+          "episodes/s11-e4-1.webp",
+          "episodes/s11-e4-2.webp"
+        ],
+        "5": [
+          "episodes/s11-e5-1.webp",
+          "episodes/s11-e5-2.webp"
+        ],
+        "6": [
+          "episodes/s11-e6-1.webp",
+          "episodes/s11-e6-2.webp"
+        ],
+        "7": [
+          "episodes/s11-e7-1.webp",
+          "episodes/s11-e7-2.webp"
+        ],
+        "8": [
+          "episodes/s11-e8-1.webp",
+          "episodes/s11-e8-2.webp"
+        ],
+        "9": [
+          "episodes/s11-e9-1.webp",
+          "episodes/s11-e9-2.webp"
+        ],
+        "10": [
+          "episodes/s11-e10-1.webp",
+          "episodes/s11-e10-2.webp"
+        ],
+        "11": [
+          "episodes/s11-e11-1.webp",
+          "episodes/s11-e11-2.webp"
+        ],
+        "12": [
+          "episodes/s11-e12-1.webp",
+          "episodes/s11-e12-2.webp"
+        ],
+        "13": [
+          "episodes/s11-e13-1.webp",
+          "episodes/s11-e13-2.webp"
+        ],
+        "14": [
+          "episodes/s11-e14-1.webp",
+          "episodes/s11-e14-2.webp"
+        ],
+        "15": [
+          "episodes/s11-e15-1.webp",
+          "episodes/s11-e15-2.webp"
+        ],
+        "16": [
+          "episodes/s11-e16-1.webp",
+          "episodes/s11-e16-2.webp"
+        ],
+        "17": [
+          "episodes/s11-e17-1.webp",
+          "episodes/s11-e17-2.webp"
+        ],
+        "18": [
+          "episodes/s11-e18-1.webp",
+          "episodes/s11-e18-2.webp"
+        ],
+        "19": [
+          "episodes/s11-e19-1.webp",
+          "episodes/s11-e19-2.webp"
+        ],
+        "20": [
+          "episodes/s11-e20-1.webp",
+          "episodes/s11-e20-2.webp"
+        ],
+        "21": [
+          "episodes/s11-e21-1.webp",
+          "episodes/s11-e21-2.webp"
+        ],
+        "22": [
+          "episodes/s11-e22-1.webp",
+          "episodes/s11-e22-2.webp"
+        ],
+        "23": [
+          "episodes/s11-e23-1.webp",
+          "episodes/s11-e23-2.webp"
+        ],
+        "24": [
+          "episodes/s11-e24-1.webp",
+          "episodes/s11-e24-2.webp"
+        ]
+      }
+    },
+    "12": {
+      "packshots": {
+        "dvd": "packshots/s12-dvd.webp",
+        "bluray": "packshots/s12-bluray.webp"
+      },
+      "dos": {
+        "dvd": "dos/s12-dvd-dos.webp",
+        "bluray": "dos/s12-bluray-dos.webp"
+      },
+      "photos": [
+        "photos/s12-1.webp",
+        "photos/s12-2.webp",
+        "photos/s12-3.webp",
+        "photos/s12-4.webp",
+        "photos/s12-5.webp"
+      ],
+      "episodes": {}
+    },
+    "13": {
+      "packshots": {
+        "dvd": "packshots/s13-dvd.webp",
+        "bluray": "packshots/s13-bluray.webp"
+      },
+      "dos": {
+        "dvd": "dos/s13-dvd-dos.webp",
+        "bluray": "dos/s13-bluray-dos.webp"
+      },
+      "photos": [
+        "photos/s13-1.webp",
+        "photos/s13-2.webp",
+        "photos/s13-3.webp",
+        "photos/s13-4.webp",
+        "photos/s13-5.webp",
+        "photos/s13-6.webp"
+      ],
+      "episodes": {}
+    },
+    "14": {
+      "packshots": {
+        "dvd": "packshots/s14-dvd.webp",
+        "bluray": "packshots/s14-bluray.webp"
+      },
+      "dos": {
+        "dvd": "dos/s14-dvd-dos.webp",
+        "bluray": "dos/s14-bluray-dos.webp"
+      },
+      "photos": [
+        "photos/s14-1.webp",
+        "photos/s14-2.webp",
+        "photos/s14-3.webp",
+        "photos/s14-4.webp",
+        "photos/s14-5.webp",
+        "photos/s14-6.webp"
+      ],
+      "episodes": {
+        "16": [
+          "episodes/s14-e16-1.webp"
+        ]
+      }
+    },
+    "15": {
+      "packshots": {
+        "dvd": "packshots/s15-dvd.webp",
+        "bluray": "packshots/s15-bluray.webp"
+      },
+      "dos": {
+        "dvd": "dos/s15-dvd-dos.webp",
+        "bluray": "dos/s15-bluray-dos.webp"
+      },
+      "photos": [
+        "photos/s15-1.webp",
+        "photos/s15-2.webp",
+        "photos/s15-3.webp",
+        "photos/s15-4.webp",
+        "photos/s15-5.webp",
+        "photos/s15-6.webp"
+      ],
+      "episodes": {}
+    }
+  },
+  "integrales": {
+    "1-5": {
+      "bluray": {
+        "ean": "3348469316407",
+        "packshot": "integrales/1-5-bluray.webp",
+        "dos": "dos/1-5-bluray-dos.webp"
+      },
+      "dvd": {
+        "ean": "3348467316348",
+        "packshot": "integrales/1-5-dvd.webp",
+        "dos": "dos/1-5-dvd-dos.webp"
+      }
+    },
+    "6-10": {
+      "bluray": {
+        "ean": "3700146553718",
+        "packshot": "integrales/6-10-bluray.webp",
+        "dos": "dos/6-10-bluray-dos.webp"
+      },
+      "dvd": {
+        "ean": "3700146553725",
+        "packshot": "integrales/6-10-dvd.webp",
+        "dos": "dos/6-10-dvd-dos.webp"
+      }
+    }
+  }
+}

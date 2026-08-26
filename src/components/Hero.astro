@@ -1,0 +1,116 @@
+---
+/**
+ * Bandeau d'accueil : le teaser en fond, muet et bouclé, sur toute la ligne de
+ * flottaison. Le mouvement — révélation du titre, zoom lent, bref épinglage —
+ * vient de src/lib/motionEngine.ts et ne s'exécute que si l'animation est
+ * autorisée ; sans lui, cette section reste une page d'accueil complète et
+ * immobile. Les deux fichiers vidéo sont produits par scripts/build_video.sh
+ * depuis les masters de diffusion.
+ */
+import { typo } from '../lib/seasons';
+
+interface Props {
+  /** Lien mis en avant à côté de l'action principale. */
+  secondary: { href: string; label: string };
+}
+
+const { secondary } = Astro.props;
+---
+
+<section class="hero" id="hero" data-hero>
+  <div class="hero__media" data-hero-media>
+    <video
+      class="hero__video"
+      src="/media/hero-loop.mp4"
+      poster="/media/hero-poster.webp"
+      autoplay
+      muted
+      loop
+      playsinline
+      disablepictureinpicture
+      aria-hidden="true"
+      tabindex="-1"></video>
+    <div class="hero__scrim" data-hero-scrim aria-hidden="true"></div>
+  </div>
+
+  <div class="page hero__content">
+    <p class="eyebrow" data-hero-eyebrow>Édition intégrale restaurée</p>
+    <h1 class="hero-title" data-hero-title>
+      {typo('Quinze saisons, une seule question : la justice a-t-elle été rendue ?')}
+    </h1>
+    <span class="hero__rule" data-hero-rule aria-hidden="true"></span>
+    <div class="hero__actions" data-hero-actions>
+      <a class="link-arrow" href="/toutes-les-saisons/">
+        Parcourir les saisons<span aria-hidden="true">→</span>
+      </a>
+      <a class="hero__link" href={secondary.href}>{secondary.label}</a>
+      <button class="hero__play" type="button" data-trailer-open>
+        <span class="hero__play-icon" aria-hidden="true">▶</span>
+        Bande-annonce
+      </button>
+    </div>
+  </div>
+
+  <a class="hero__scroll-cue" href="#statement" data-hero-cue>
+    <span class="hero__scroll-cue-track" aria-hidden="true">
+      <span class="hero__scroll-cue-thumb"></span>
+    </span>
+    Défiler
+  </a>
+</section>
+
+<dialog class="trailer" data-trailer-dialog aria-label="Bande-annonce">
+  <button class="trailer__close" type="button" data-trailer-close aria-label="Fermer">×</button>
+  <video
+    class="trailer__video"
+    src="/media/bande-annonce.mp4"
+    poster="/media/hero-poster.webp"
+    controls
+    preload="none"
+    playsinline></video>
+</dialog>
+
+<script>
+  const dialog = document.querySelector<HTMLDialogElement>('[data-trailer-dialog]');
+  const video = dialog?.querySelector('video');
+
+  document.querySelector('[data-trailer-open]')?.addEventListener('click', () => {
+    dialog?.showModal();
+    video?.play();
+    document.dispatchEvent(new Event('dialog:open'));
+  });
+
+  const close = () => {
+    video?.pause();
+    dialog?.close();
+  };
+
+  document.querySelector('[data-trailer-close]')?.addEventListener('click', close);
+  dialog?.addEventListener('close', () => {
+    video?.pause();
+    document.dispatchEvent(new Event('dialog:close'));
+  });
+  // Clic dans la zone sombre autour de la vidéo.
+  dialog?.addEventListener('click', (event) => {
+    if (event.target === dialog) close();
+  });
+
+  // Le fond animé n'a pas de raison d'être pour qui demande moins de mouvement.
+  // Vérifié ici directement plutôt que via l'attribut posé par motion.ts : les
+  // deux scripts sont chargés séparément, sans garantie d'ordre entre eux.
+  function motionRefused(): boolean {
+    try {
+      const stored = localStorage.getItem('law-order:motion');
+      if (stored === 'reduced' || stored === 'full') return stored === 'reduced';
+    } catch {
+      // Ignoré : on retombe sur la préférence système.
+    }
+    return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  }
+
+  if (motionRefused()) {
+    const loop = document.querySelector<HTMLVideoElement>('.hero__video');
+    loop?.pause();
+    loop?.removeAttribute('autoplay');
+  }
+</script>

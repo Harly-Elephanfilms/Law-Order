@@ -1,0 +1,72 @@
+---
+/**
+ * Galerie horizontale des quinze saisons, pièce centrale de l'accueil.
+ *
+ * Le balisage est le même quel que soit le mouvement autorisé : une rangée
+ * de vraies vignettes (image, numéro, années), chacune un vrai lien vers sa
+ * fiche saison. src/lib/motionEngine.ts décide seulement de la présentation —
+ * rangée qui défile nativement, ou galerie épinglée qui se déroule avec le
+ * scroll sur grand écran. Voir .filmstrip dans global.css.
+ */
+import { Image } from 'astro:assets';
+
+import type { Season } from '../lib/seasons';
+
+interface Props {
+  seasons: Season[];
+}
+
+const { seasons } = Astro.props;
+---
+
+<section class="filmstrip" data-filmstrip aria-labelledby="produits-titre">
+  <div class="page">
+    <p class="eyebrow" data-reveal>Saison par saison</p>
+    <h2 class="section-title" id="produits-titre" data-reveal>
+      Quinze intégrales, un même soin de restauration
+    </h2>
+    <p class="lede" data-reveal>
+      Chaque coffret réunit une saison complète, dans son format d'image respecté et l'ordre de
+      diffusion original.
+    </p>
+  </div>
+
+  <div class="filmstrip__viewport" data-filmstrip-viewport>
+    <ul class="filmstrip__track" data-filmstrip-track>
+      {
+        seasons.map((season) => {
+          const cover = season.editions.find((e) => e.packshot)?.packshot;
+          const supports = season.editions.map((e) => e.label).join(' · ');
+          return (
+            <li>
+              <a class="filmstrip__card" href={season.href} data-filmstrip-card>
+                <span class="filmstrip__art" data-filmstrip-art>
+                  {cover && (
+                    <Image
+                      src={cover}
+                      alt={`Coffret de la saison ${season.number} de New York Police Judiciaire`}
+                      widths={[220, 320, 460]}
+                      sizes="(min-width: 64em) 16rem, 45vw"
+                      loading="lazy"
+                    />
+                  )}
+                </span>
+                <span class="filmstrip__number">Saison {season.number}</span>
+                <span class="filmstrip__meta">
+                  {season.years}
+                  {supports && ` · ${supports}`}
+                </span>
+              </a>
+            </li>
+          );
+        })
+      }
+    </ul>
+  </div>
+
+  <div class="page filmstrip__end">
+    <a class="link-arrow" href="/toutes-les-saisons/">
+      Voir toutes les saisons, saison par saison<span aria-hidden="true">→</span>
+    </a>
+  </div>
+</section>

@@ -1,0 +1,21 @@
+# Règles de cache du site statique.
+#
+# Sans elles, un navigateur peut resservir une page HTML déjà téléchargée et
+# continuer d'afficher la version précédente longtemps après une mise en ligne.
+<IfModule mod_headers.c>
+  # Les fichiers de /_astro/ portent une empreinte de leur contenu dans leur
+  # nom : ils ne changent jamais. Une modification produit un nouveau nom.
+  SetEnvIf Request_URI "^/_astro/" EMPREINTE_DANS_LE_NOM
+  Header set Cache-Control "public, max-age=31536000, immutable" env=EMPREINTE_DANS_LE_NOM
+
+  # Le HTML, lui, garde la même adresse d'une version à l'autre : il doit être
+  # revalidé à chaque visite. La revalidation reste peu coûteuse (304 vide).
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+
+  # Vidéos et robots.txt : conservés une heure, le temps de couvrir une visite.
+  <FilesMatch "\.(mp4|txt|xml)$">
+    Header set Cache-Control "public, max-age=3600"
+  </FilesMatch>
+</IfModule>

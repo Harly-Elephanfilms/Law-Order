@@ -1,0 +1,128 @@
+---
+import type { ImageMetadata } from 'astro';
+import { Image } from 'astro:assets';
+
+import packshot from '../assets/true-crime/packshot.webp';
+import Lightbox from '../components/Lightbox.astro';
+import Photo from '../components/Photo.astro';
+import Base from '../layouts/Base.astro';
+import trueCrime from '../data/true-crime.json';
+import { schemaTrueCrime } from '../lib/schema';
+import { typo } from '../lib/seasons';
+
+const stills = Object.values(
+  import.meta.glob<{ default: ImageMetadata }>('../assets/true-crime/still-*.webp', {
+    eager: true,
+  }),
+).map((module) => module.default);
+
+const { edition } = trueCrime;
+---
+
+<Base
+  title={`${trueCrime.titre} — ${trueCrime.sousTitre} en DVD | Law&Order.shop`}
+  description={`${trueCrime.sousTitre} : les huit épisodes du spin-off de New York Police Judiciaire consacré à l’affaire Menendez, en coffret 3 DVD.`}
+  path="/law-order-true-crime/"
+  image={packshot}
+  schema={schemaTrueCrime(
+    `${trueCrime.titre} — ${trueCrime.sousTitre}`,
+    trueCrime.synopsis,
+    packshot.src,
+  )}
+>
+  <div class="page">
+    <section class="season-hero">
+      <div>
+        <p class="eyebrow">{trueCrime.titre}</p>
+        <h1>{typo(trueCrime.sousTitre)}</h1>
+        <p class="season-hero__years">
+          {trueCrime.annee} · {trueCrime.episodes.length} épisodes
+        </p>
+        <p class="stack">{typo(trueCrime.accroche)}</p>
+      </div>
+      <div class="season-hero__art" data-parallax="10">
+        <Image
+          src={packshot}
+          alt="Coffret DVD de Law & Order True Crime, L’Affaire Menendez"
+          widths={[360, 600, 900]}
+          sizes="(min-width: 52em) 32rem, 85vw"
+          loading="eager"
+        />
+      </div>
+    </section>
+  </div>
+
+  <section class="page section">
+    <p class="eyebrow">L’affaire</p>
+    <div class="prose">
+      <p>{typo(trueCrime.synopsis)}</p>
+    </div>
+  </section>
+
+  <section class="page section">
+    <p class="eyebrow">L’édition</p>
+    <h2 class="section-title">Coffret {edition.label}</h2>
+    <div class="editions editions--single stack--wide" data-reveal-group>
+      <article class="edition" data-reveal>
+        <h3>{edition.label}</h3>
+        <dl>
+          <dt>Caractéristiques</dt>
+          <dd>
+            <ul>
+              {edition.technique.map((line) => <li>{typo(line)}</li>)}
+            </ul>
+          </dd>
+          <dt>Code EAN</dt>
+          <dd>{edition.ean}</dd>
+        </dl>
+        <a class="button button--solid" href={edition.url} rel="noopener">
+          Commander le {edition.label}
+        </a>
+      </article>
+    </div>
+    <p class="note">Les commandes sont traitées par Elephant Films, éditeur de la série en France.</p>
+  </section>
+
+  <section class="page section">
+    <p class="eyebrow">Guide des épisodes</p>
+    <h2 class="section-title">Les huit épisodes</h2>
+    <ol class="episodes stack--wide">
+      {
+        trueCrime.episodes.map((episode) => (
+          <li class="episode" data-reveal>
+            <p class="episode__number">Épisode {episode.numero}</p>
+            <div>
+              <h3 class="episode__title">{typo(episode.titreVf)}</h3>
+              <p class="episode__meta">
+                {episode.titreVo} · {episode.duree} · Réalisation : {episode.realisateur}
+              </p>
+              <p class="episode__resume">{typo(episode.resume)}</p>
+              <p class="episode__cast">{episode.casting}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <section class="page section">
+    <p class="eyebrow">Images de la série</p>
+    <ul class="gallery stack" data-reveal-group>
+      {
+        stills.map((still, i) => (
+          <li data-reveal="clip">
+            <Photo
+              src={still}
+              alt="Scène de Law & Order True Crime, L’Affaire Menendez"
+              widths={[400, 700, 1000]}
+              sizes="(min-width: 64em) 24rem, (min-width: 40em) 45vw, 90vw"
+              loading={i < 2 ? 'eager' : 'lazy'}
+            />
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <Lightbox />
+</Base>

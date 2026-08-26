@@ -1,0 +1,94 @@
+{
+  "_comment": "Guide des épisodes repris du site WordPress existant ; caractéristiques et EAN relevés sur la fiche produit Elephant Films. Visuels dans src/assets/true-crime/, téléchargés depuis le site actuel.",
+  "titre": "Law & Order True Crime",
+  "sousTitre": "L'Affaire Menendez",
+  "annee": "2018",
+  "accroche": "Le spin-off de la franchise « New York Police Judiciaire », consacré à une seule affaire.",
+  "synopsis": "Dans la soirée du 20 août 1989, Lyle et Erik Menendez tuent leurs parents avec un fusil de chasse Mossberg, au 722 North Elm Drive, à Beverly Hills. Ils partent en voiture, jettent leurs fusils sur Mulholland Drive avant d'aller au cinéma. À leur retour, les frères appellent le 911 pour dire que leurs parents ont été assassinés. Très rapidement suspectés, les deux héritiers sont arrêtés et l'affaire devient nationale lorsque le procès est médiatisé. Mais qu'est-ce qui a bien pu les amener à commettre l'irréparable ?",
+  "edition": {
+    "label": "DVD",
+    "ean": "3348467311749",
+    "url": "https://www.elephantfilms.com/law-order-true-crime-l-affaire-menendez-coffret-3-dvd-c2x34442716",
+    "technique": [
+      "3 DVD",
+      "8 épisodes — 270 min. environ",
+      "Format d'image : 1.78 : 1 — Couleur",
+      "Langues : Français 5.1, Français 2.0, Anglais 2.0",
+      "Sous-titres : Français"
+    ]
+  },
+  "episodes": [
+    {
+      "numero": 1,
+      "titreVf": "L’Affaire Menendez : Épisode 1",
+      "titreVo": "The Menendez Murders: Episode 1",
+      "realisateur": "Lesli Linka Glatter",
+      "casting": "Edie Falco, Miles Gaston Villanueva, Gus Halper, Josh Charles, Chris Bauer",
+      "resume": "Alors que Jose et Kitty Menendez ont été retrouvés assassinés dans leur demeure à Beverly Hills, leur fils Lyle se montre stoïque et mène la grande vie avec l’argent de ses parents, tandis que son frère Erik semble accablé par le chagrin. Rapidement, l’enquête des détectives Les Zoeller et Tom Linehan les mène à suspecter les deux frères…",
+      "duree": "42 min"
+    },
+    {
+      "numero": 2,
+      "titreVf": "L’Affaire Menendez : Épisode 2",
+      "titreVo": "The Menendez Murders: Episode 2",
+      "realisateur": "Lesli Linka Glatter",
+      "casting": "Edie Falco, Miles Gaston Villanueva, Gus Halper, Josh Charles, Chris Bauer",
+      "resume": "Lyle réalise que des remarques qu’il pensait anodines, émises lors d’un entretien avec les inspecteurs au sujet de ses parents, risquent de se retourner contre lui. Erik, rongé par la culpabilité, fait une confession choquante à son thérapeute, le docteur Oziel, sans se douter qu’une tierce personne écoute la session…",
+      "duree": "42 min"
+    },
+    {
+      "numero": 3,
+      "titreVf": "L’Affaire Menendez : Épisode 3",
+      "titreVo": "The Menendez Murders: Episode 3",
+      "realisateur": "Holly Dale",
+      "casting": "Edie Falco, Miles Gaston Villanueva, Gus Halper, Josh Charles, Chris Bauer, Julianne Nicholson, Anthony Edwards",
+      "resume": "Soupçonnés du meurtre de leurs parents, Lyle et Erik sont placés en garde à vue. Leslie Abramson travaille sans relâche avec Jill Lansing pour monter leur dossier de défense et comprendre ce qui aurait pu les pousser à un tel acte. Les frères plaident non coupables du chef d’accusation de meurtre, mais le docteur Oziel a enregistré une séance où les frères avouent le meurtre. Leslie Abramson se bat pour que ces enregistrements soient couverts par le secret médical…",
+      "duree": "42 min"
+    },
+    {
+      "numero": 4,
+      "titreVf": "L’Affaire Menendez : Épisode 4",
+      "titreVo": "The Menendez Murders: Episode 4",
+      "realisateur": "Holly Dale",
+      "casting": "Edie Falco, Miles Gaston Villanueva, Gus Halper, Josh Charles, Chris Bauer, Julianne Nicholson",
+      "resume": "Erik et Lyle ont fini par avouer les double meurtre de leurs parents, et ils commencent à raconter en détail les nombreux sévices dont ils auraient été victimes. Mais aucune preuve ne pouvant corroborer leurs propos, les avocats tentent de de comprendre un peu plus la personnalité des membres de la famille Menendez …",
+      "duree": "42 min"
+    },
+    {
+      "numero": 5,
+      "titreVf": "L’Affaire Menendez : Épisode 5",
+      "titreVo": "The Menendez Murders: Episode 5",
+      "realisateur": "Fred Berner",
+      "casting": "Edie Falco, Miles Gaston Villanueva, Gus Halper, Josh Charles, Chris Bauer, Julianne Nicholson, Anthony Edwards",
+      "resume": "Alors que le procès est sur le point de débuter, le juge Weisberg autorise la présence d’une caméra dans le tribunal, qui retransmettra les audiences en direct à la télévision. La crédibilité du témoignage du Docteur Oziel, le principal témoin à charge, est mise à mal par la défense, qui remet en cause sa déontologie.",
+      "duree": "42 min"
+    },
+    {
+      "numero": 6,
+      "titreVf": "L’Affaire Menendez : Épisode 6",
+      "titreVo": "The Menendez Murders: Episode 6",
+      "realisateur": "Fred Berner",
+      "casting": "Edie Falco, Miles Gaston Villanueva, Gus Halper, Josh Charles, Chris Bauer, Julianne Nicholson, Anthony Edwards",
+      "resume": "Lyle et Erik sont appelés à la barre pour la première fois. Ils évoquent alors les années de mauvais traitements et d’agressions sexuelles répétées. Le juge Weisberg approuve la publication des cassettes du docteur Oziel contenant la confession des frères.",
+      "duree": "42 min"
+    },
+    {
+      "numero": 7,
+      "titreVf": "L’Affaire Menendez : Épisode 7",
+      "titreVo": "The Menendez Murders: Episode 7",
+      "realisateur": "Michael Pressman",
+      "casting": "Edie Falco, Miles Gaston Villanueva, Gus Halper, Josh Charles, Chris Bauer, Julianne Nicholson, Anthony Edwards",
+      "resume": "Les avocats ayant rendus leurs conclusions, c’est maintenant aux jurys de décider du verdict. Mais les délibérations s’éternisent, les jurys n’arrivant pas à se mettre d’accord. Plus le temps passe, plus le risque d’une annulation du procès augmente, tandis que la crédibilité du juge Weiberg est mise à rude épreuve dans les medias…",
+      "duree": "42 min"
+    },
+    {
+      "numero": 8,
+      "titreVf": "L’Affaire Menendez : Épisode 8",
+      "titreVo": "The Menendez Murders: Episode 8",
+      "realisateur": "Michael Pressman",
+      "casting": "Edie Falco, Miles Gaston Villanueva, Gus Halper, Josh Charles, Chris Bauer, Harry Hamlin, Anthony Edwards",
+      "resume": "Un second procès commence, et Barry Levin rejoint Leslie à la défense. Le juge Weisberg fait tout pour entâcher la crédibilité de Leslie auprès du jury, et il refuse que la famille de Lyle et Erik témoigne.",
+      "duree": "42 min"
+    }
+  ]
+}

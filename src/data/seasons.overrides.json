@@ -1,0 +1,99 @@
+{
+  "_comment": "Complements saisis a la main. Saisons 7 a 10 : transcrites des jaquettes PDF, faute de fiche FIP. Saison 6 : la FIP Blu-ray annonce 24 episodes et 24 x 48 min, alors que les deux jaquettes imprimees et la fiche produit Elephant Films (1104 min) donnent 23 episodes ; on retient le packaging. Ce fichier a le dernier mot sur build_data.py.",
+  "6": {
+    "episodes": 23,
+    "supports": {
+      "bluray": {
+        "technique": "5 Blu-ray\n23 x 48 min. environ\nDurée totale : 19 heures environ\nFormat d'image : 1.78 : 1 — 1920 x 1080p Couleur\nLangues : Français, Anglais 2.0\nSous-titres : Français"
+      }
+    }
+  },
+  "7": {
+    "resume": "Alors que Lennie Briscoe tente de surmonter la disparition tragique du substitut Claire Kincaid, dont il a involontairement provoqué le décès, Jack McCoy lui trouve une remplaçante en la personne de Jamie Ross, une avocate révoltée par les pratiques de ses anciens collègues.",
+    "accroche_secondaire": "Une saison qui laisse plus de place à la vie privée des protagonistes, mais les confronte aussi à des cas de plus en plus difficiles, comme la remise en liberté d'un violeur récidiviste ; ou un meurtre impliquant une productrice d'Hollywood, qui donne lieu au plus ambitieux épisode de la série, en 3 parties — tourné entre New York et Los Angeles. Carey Lowell (Nuits blanches à Seattle) rejoint la série dans le rôle de Jamie Ross, qu'elle endosse de manière récurrente de 1996 à 1998 avant de le retrouver pour des apparitions, ainsi que dans New York Cour de justice jusqu'en 2022.",
+    "supports": {
+      "dvd": {
+        "technique": "6 DVD\n23 x 48 min. environ\nFormat d'image respecté : 1.78 : 1 — Couleur\nLangues : Français, Anglais Stéréo\nSous-titres : Français",
+        "supplements": [
+          "Merkerson & Waterston : souvenirs croisés",
+          "Crédits"
+        ]
+      },
+      "bluray": {
+        "technique": "5 Blu-ray\n23 x 48 min. environ\nFormat d'image : 1.78 : 1 — 1920 x 1080p Couleur\nLangues : Français, Anglais Stéréo\nSous-titres : Français",
+        "supplements": [
+          "Merkerson & Waterston : souvenirs croisés",
+          "Crédits"
+        ]
+      }
+    }
+  },
+  "8": {
+    "resume": "Alors que les affaires de plus en plus compliquées se succèdent, les policiers du 27e district de New York sont sous pression suite à la plainte de leur lieutenant Anita Van Buren contre sa hiérarchie. Le Detective Curtis doit de plus faire face à la maladie de sa femme, et Briscoe à l'addiction de sa fille. Au bureau du procureur, McCoy prend des libertés de plus en plus grandes pour gagner ses affaires en période électorale, sous l'œil réprobateur de son assistante Jamie Ross.",
+    "accroche_secondaire": "Une saison particulièrement dense et sombre, où des acteurs récurrents rejoignent le casting principal : J.K. Simmons (Whiplash) endosse le rôle du Dr Emil Skoda jusqu'à la fin de la série ; Edie Falco (Les Soprano) revient dans le rôle d'une avocate et Robert Vaughn (Les Sept Mercenaires) incarne un homme d'affaires confronté à la justice, mais principal donateur de la campagne du procureur Adam Schiff.",
+    "supports": {
+      "dvd": {
+        "technique": "6 DVD\n23 x 45 min. environ\nFormat d'image respecté : 1.78 : 1 — Couleur\nLangues : Français, Anglais Stéréo\nSous-titres : Français",
+        "supplements": [
+          "Épisode crossover Homicide, saison 6 épisode 5 : Mon enfant, partie 2",
+          "Crédits"
+        ]
+      },
+      "bluray": {
+        "technique": "5 Blu-ray\n24 x 46 min. environ\nFormat d'image : 1.78 : 1 — 1920 x 1080p Couleur\nLangues : Français, Anglais Stéréo\nSous-titres : Français",
+        "supplements": [
+          "Épisode crossover Homicide, saison 6 épisode 5 : Mon enfant, partie 2",
+          "Crédits"
+        ]
+      }
+    }
+  },
+  "9": {
+    "resume": "Après le départ de Jamie Ross du bureau du procureur, McCoy engage Abbie Carmichael comme substitut. Ancienne des stups, elle n'hésite pas à s'engager sur le terrain aux côtés des détectives Curtis et Briscoe, et à tenir tête à ses supérieurs pour faire valoir ses convictions : favorable à la peine de mort, opposée aux remises de peines, au contrôle des armes et aux programmes de réhabilitation ; elle apporte une voix conservatrice au bureau plus libéral d'Adam Schiff.",
+    "accroche_secondaire": "Angie Harmon (Rizzoli & Isles) intègre le casting, accompagnée d'une pléiade de guests, dont Julia Roberts (Erin Brockovich, seule contre tous). Côté scénario, l'auteur de comics Gerry Conway (créateur du Punisher pour Marvel) ou David Shore (futur producteur de Dr House) consolident l'équipe de Dick Wolf. La saison voit la dernière performance dans la série de John Fiore, le discret Detective Profaci, présent depuis la saison 1.",
+    "supports": {
+      "dvd": {
+        "technique": "6 DVD\n24 x 42 min. environ\nFormat d'image respecté : 1.78 : 1 — Couleur\nLangues : Français, Anglais Stéréo\nSous-titres : Français",
+        "supplements": [
+          "Crédits"
+        ],
+        "edition": "Cette édition présente pour la première fois l'intégralité de la saison restaurée en Haute-Définition."
+      },
+      "bluray": {
+        "technique": "6 Blu-ray\n24 x 45 min. environ\nFormat d'image : 1.78 : 1 — 1920 x 1080p Couleur\nLangues : Français, Anglais Stéréo\nSous-titres : Français",
+        "supplements": [
+          "Exiled (téléfilm — VOSTFR, SD)",
+          "Épisode crossover Homicide, saison 7 épisode 15 : Sideshow (2/2)",
+          "L'Enfer des crossover, par Alain Carrazé",
+          "Crédits"
+        ],
+        "edition": "Cette édition Blu-ray présente pour la première fois l'intégralité de la saison restaurée en Haute-Définition, un épisode crossover de la série Homicide et le téléfilm Exiled, qui voit le retour de Logan, interprété par Chris Noth."
+      }
+    }
+  },
+  "10": {
+    "resume": "Fusillade à Central Park, tueurs mineurs, tentative d'assassinat de juges et d'avocats, viols incestueux, bébés retrouvés morts… Les enquêtes les plus difficiles se succèdent, alors que l'inspecteur Briscoe doute de la maturité de son nouvel équipier, Ed Green. Il se montre plus agressif dans sa manière d'appréhender les suspects, ce qui peut mettre en difficulté le bureau du procureur, où les affaires sont toujours prises en charge par McCoy et Carmichael.",
+    "accroche_secondaire": "À l'orée des années 2000, la grande saga judiciaire de Dick Wolf prend de l'ampleur, avec le lancement de la série dérivée Unité spéciale, centrée sur les crimes sexuels. Les scénaristes créent des ponts entre les deux franchises avec des enquêtes liées et des crossover. Cette saison voit également l'arrivée de Jesse L. Martin (Irrationnel), qui succède à Benjamin Bratt et reste jusqu'à la saison 18, mais aussi le retour de Carey Lowell, qui vient boucler les intrigues liées à son personnage de Jamie Ross ; ainsi que des invités de marque, comme Tom Berenger (Platoon).",
+    "supports": {
+      "dvd": {
+        "technique": "7 DVD\n24 x 42 min. environ\nFormat d'image respecté : 1.78 : 1 — Couleur\nLangues : Français, Anglais Stéréo\nSous-titres : Français",
+        "supplements": [
+          "Épisode crossover New York, unité spéciale, saison 1 épisode 15 : Libération sur parole",
+          "Dick Wolf : réflexions au fil des ans",
+          "L'Enfer des crossover, par Alain Carrazé",
+          "Crédits"
+        ],
+        "edition": "Cette édition présente pour la première fois l'intégralité de la saison 10 restaurée en Haute-Définition et un épisode crossover de la série New York, unité spéciale."
+      },
+      "bluray": {
+        "technique": "5 Blu-ray\n24 x 45 min. environ\nFormat d'image : 1.78 : 1 — 1920 x 1080p Couleur\nLangues : Français, Anglais Stéréo\nSous-titres : Français",
+        "supplements": [
+          "New York, unité spéciale, saison 1 épisode 15 : Libération sur parole",
+          "Dick Wolf : réflexions au fil des ans",
+          "Crédits"
+        ],
+        "edition": "Cette édition Blu-ray présente pour la première fois l'intégralité de la saison 10 restaurée en Haute-Définition et un épisode crossover de la série New York, unité spéciale."
+      }
+    }
+  }
+}

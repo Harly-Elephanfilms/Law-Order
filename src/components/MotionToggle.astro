@@ -1,0 +1,16 @@
+---
+/**
+ * Bascule d'animation : la préférence système (prefers-reduced-motion)
+ * gouverne par défaut ; ce bouton permet de la court-circuiter pour qui ne
+ * peut pas changer les réglages de l'appareil qu'iel utilise (poste
+ * partagé, par exemple). Le choix est mémorisé sur cet appareil
+ * (localStorage), jamais transmis — pas de bandeau de consentement pour
+ * autant : voir src/lib/motion.ts.
+ */
+---
+
+<button type="button" class="motion-toggle" data-motion-toggle aria-pressed="true">
+  <span class="motion-toggle__dot" aria-hidden="true"></span>
+  <span data-motion-toggle-label>Animations</span>
+</button>
+<p class="visually-hidden" role="status" aria-live="polite" data-motion-announce></p>

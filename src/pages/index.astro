@@ -1,0 +1,78 @@
+---
+import EditionVisuals from '../components/EditionVisuals.astro';
+import Hero from '../components/Hero.astro';
+import Lightbox from '../components/Lightbox.astro';
+import SeasonFilmstrip from '../components/SeasonFilmstrip.astro';
+import Base from '../layouts/Base.astro';
+import { schemaAccueil } from '../lib/schema';
+import { NARRATION, integrales, seasons, typo } from '../lib/seasons';
+
+const latest = seasons[seasons.length - 1];
+const vignette = integrales[0]?.editions[0]?.packshot;
+---
+
+<Base
+  title="New York Police Judiciaire — les 15 saisons en DVD et Blu-ray | Law&Order.shop"
+  description="Les quinze saisons de New York Police Judiciaire (Law & Order) éditées en DVD et Blu-ray par Elephant Films : contenu des coffrets, bonus, caractéristiques techniques et liens d’achat."
+  image={vignette}
+  schema={schemaAccueil(integrales)}
+>
+  <Hero secondary={{ href: latest.href, label: `Dernière parue : saison ${latest.number}` }} />
+
+  <section class="statement" id="statement">
+    <div class="page">
+      <p class="statement__quote" data-statement-quote>{NARRATION}</p>
+      <div class="statement__body">
+        <p class="statement__text" data-reveal>
+          La série créée par Dick Wolf est éditée par Elephant Films sous licence Universal, saison
+          par saison, en coffrets DVD et Blu-ray. Chaque intégrale présente la saison dans son format
+          d’image respecté et dans l’ordre de diffusion original, restaurée en haute définition.
+        </p>
+        <p data-reveal>
+          <a class="link-arrow" href="/la-serie/">
+            Découvrir la série<span aria-hidden="true">→</span>
+          </a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <SeasonFilmstrip seasons={seasons} />
+
+  <section class="page section">
+    <p class="eyebrow" data-reveal>Les intégrales</p>
+    <h2 class="section-title" data-reveal>Cinq saisons dans un seul coffret</h2>
+    <div class="editions stack" data-reveal-group>
+      {
+        integrales.map((integrale) => (
+          <article class="edition integrale" data-reveal>
+            <h3>{typo(integrale.label)}</h3>
+            <p>
+              L’ensemble des cinq saisons réunies, dans la même édition restaurée que les coffrets
+              individuels.
+            </p>
+            <div class="integrale__editions">
+              {integrale.editions.map((edition) => (
+                <div class="integrale__edition">
+                  <h4 class="integrale__support">{edition.label}</h4>
+                  <EditionVisuals
+                    edition={edition}
+                    contexte={integrale.label.toLowerCase()}
+                    montrerDos={false}
+                  />
+                  {edition.url && (
+                    <a class="button" href={edition.url} rel="noopener">
+                      Commander le {edition.label}
+                    </a>
+                  )}
+                </div>
+              ))}
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <Lightbox />
+</Base>

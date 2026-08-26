@@ -1,0 +1,23 @@
+---
+import SeasonCard from '../../components/SeasonCard.astro';
+import Base from '../../layouts/Base.astro';
+import { seasons } from '../../lib/seasons';
+---
+
+<Base
+  title="Toutes les saisons de New York Police Judiciaire | Law&Order.shop"
+  description="Les quinze saisons de New York Police Judiciaire en coffrets DVD et Blu-ray : résumé, nombre d’épisodes, bonus et caractéristiques de chaque intégrale."
+  path="/toutes-les-saisons/"
+  image={seasons[0]?.editions[0]?.packshot}
+>
+  <section class="page section">
+    <p class="eyebrow" data-reveal>Catalogue</p>
+    <h1 class="section-title" data-reveal>Toutes les saisons</h1>
+    <p class="lede">
+      De 1990 à 2005, quinze saisons éditées en coffrets DVD et Blu-ray par Elephant Films.
+    </p>
+    <ul class="season-grid stack--wider">
+      {seasons.map((season, i) => <SeasonCard season={season} eager={i < 4} />)}
+    </ul>
+  </section>
+</Base>

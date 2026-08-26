@@ -1,0 +1,22 @@
+---
+import type { ImageMetadata } from 'astro';
+import { Image, getImage } from 'astro:assets';
+
+interface Props {
+  src: ImageMetadata;
+  alt: string;
+  widths: number[];
+  sizes: string;
+  loading?: 'eager' | 'lazy';
+}
+
+const { src, alt, widths, sizes, loading = 'lazy' } = Astro.props;
+
+// La version grand format sert de cible au lien : elle s’ouvre dans la visionneuse,
+// ou directement dans l’onglet si le JavaScript n’a pas pris la main.
+const large = await getImage({ src, width: Math.min(src.width, 1600), format: 'webp' });
+---
+
+<a class="photo" href={large.src} data-lightbox>
+  <Image src={src} alt={alt} widths={widths} sizes={sizes} loading={loading} />
+</a>

@@ -1,0 +1,1310 @@
+/* Law & Order — feuille de style unique.
+   Le site est éditorial et sombre : les packshots et les photos de la série,
+   qui sont les seuls éléments colorés, se détachent sur un fond neutre. */
+
+:root {
+  --ink: #0b0b0c;
+  --ink-raised: #141416;
+  --ink-line: #26262a;
+  --paper: #f2f0ec;
+  --paper-dim: #a3a09a;
+  --brass: #c8a24a;
+  --brass-dim: #8d7433;
+  --brass-bright: #e6c274;
+
+  /* Bleu marine froid des boîtiers et des skylines nocturnes des jaquettes :
+     un accent, jamais une couleur dominante. */
+  --steel: #1a2431;
+  --steel-2: #0e1620;
+  --ink-deep: #050506;
+
+  --serif: 'Iowan Old Style', 'Palatino Linotype', Palatino, 'Times New Roman', serif;
+  --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+
+  --measure: 68ch;
+  --page: 76rem;
+  --gap: clamp(1.5rem, 4vw, 3rem);
+
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  color-scheme: dark;
+}
+
+/* Un ancrage (sommaire, retour de recherche) ne doit jamais arriver sous
+   l'en-tête collant : la cible garde une marge de respiration au-dessus. */
+h1[id], h2[id], h3[id], h4[id] {
+  scroll-margin-top: 6rem;
+}
+
+body {
+  margin: 0;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--sans);
+  font-size: clamp(1rem, 0.96rem + 0.2vw, 1.0625rem);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  color: inherit;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--serif);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+  margin: 0;
+}
+
+p {
+  margin: 0 0 1em;
+  text-wrap: pretty;
+}
+
+p:last-child {
+  margin-bottom: 0;
+}
+
+/* ---------- Structure ---------- */
+
+.page {
+  width: min(100% - 2.5rem, var(--page));
+  margin-inline: auto;
+}
+
+.section {
+  padding-block: clamp(3rem, 8vw, 6rem);
+}
+
+.section + .section {
+  border-top: 1px solid var(--ink-line);
+}
+
+.prose {
+  max-width: var(--measure);
+}
+
+.eyebrow {
+  font-family: var(--sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--brass);
+  margin: 0 0 1rem;
+}
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+}
+
+.skip-link:focus {
+  left: 1rem;
+  top: 1rem;
+  z-index: 10;
+  padding: 0.5rem 1rem;
+  background: var(--paper);
+  color: var(--ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--brass);
+  outline-offset: 3px;
+}
+
+/* ---------- En-tête et pied de page ---------- */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: color-mix(in srgb, var(--ink) 92%, transparent);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--ink-line);
+}
+
+.site-header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding-block: 0.9rem;
+}
+
+.wordmark {
+  font-family: var(--serif);
+  font-size: 1.05rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  line-height: 1.15;
+}
+
+.wordmark span {
+  display: block;
+  font-family: var(--sans);
+  font-size: 0.6rem;
+  letter-spacing: 0.22em;
+  color: var(--paper-dim);
+}
+
+.site-header__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: clamp(1rem, 3vw, 2rem);
+}
+
+.site-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(1rem, 3vw, 2rem);
+  font-size: 0.9rem;
+}
+
+.site-nav a {
+  text-decoration: none;
+  white-space: nowrap;
+  color: var(--paper-dim);
+  padding-block: 0.25rem;
+  border-bottom: 1px solid transparent;
+}
+
+.site-nav a:hover,
+.site-nav a[aria-current='page'] {
+  color: var(--paper);
+  border-bottom-color: var(--brass);
+}
+
+/* Sous 34em, le nom du programme et le menu ne tiennent pas sur une ligne :
+   on empile plutôt que de laisser l'en-tête collant manger l'écran. */
+@media (max-width: 34em) {
+  .site-header__inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.4rem;
+    padding-block: 0.7rem;
+  }
+
+  .wordmark {
+    font-size: 0.85rem;
+  }
+
+  .site-nav {
+    gap: 1.25rem;
+    font-size: 0.85rem;
+  }
+
+  .site-header__actions {
+    gap: 0.85rem 1.25rem;
+  }
+}
+
+.site-footer {
+  border-top: 1px solid var(--ink-line);
+  padding-block: 3rem;
+  font-size: 0.8rem;
+  color: var(--paper-dim);
+}
+
+.site-footer a {
+  color: var(--paper-dim);
+}
+
+.site-footer__links {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.site-footer__legal {
+  margin-top: 1.5rem;
+  font-size: 0.7rem;
+  line-height: 1.6;
+  color: #6f6c67;
+}
+
+/* ---------- Boutons ---------- */
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1.35rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 1px solid var(--brass-dim);
+  color: var(--brass);
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.button:hover {
+  background: var(--brass);
+  color: var(--ink);
+}
+
+.button--solid {
+  background: var(--paper);
+  border-color: var(--paper);
+  color: var(--ink);
+}
+
+.button--solid:hover {
+  background: var(--brass);
+  border-color: var(--brass);
+}
+
+/* ---------- Grille des saisons ---------- */
+
+.season-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: var(--gap);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.season-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  height: 100%;
+  text-decoration: none;
+}
+
+/* Les packshots sont des rendus détourés : ils se posent directement sur le
+   fond de la page, sans cadre ni aplat. La vignette impose un carré pour que
+   la grille reste régulière, quel que soit le format du visuel. */
+.season-card__art {
+  display: grid;
+  place-items: center;
+  /* Les packshots rognés sont en portrait : le cadre suit leur proportion. */
+  aspect-ratio: 3 / 4;
+}
+
+/* Dimensions définies des deux côtés : une image en `width: auto` n'a aucune
+   taille tant qu'elle n'est pas chargée, donc jamais d'intersection avec le
+   viewport — et le chargement différé ne se déclenche jamais. */
+.season-card__art img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  /* Sans cette limite, l'image impose sa hauteur au cadre et en annule la
+     proportion : le visuel déborde et se retrouve rogné. */
+  min-height: 0;
+  object-fit: contain;
+  transition: transform 0.35s ease;
+}
+
+.season-card:hover .season-card__art img {
+  transform: scale(1.04);
+}
+
+.season-card__number {
+  font-family: var(--serif);
+  font-size: 1.35rem;
+}
+
+.season-card__meta {
+  font-size: 0.8rem;
+  color: var(--paper-dim);
+}
+
+.season-card__teaser {
+  font-size: 0.9rem;
+  color: var(--paper-dim);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ---------- Fiche saison ---------- */
+
+.season-hero {
+  display: grid;
+  gap: var(--gap);
+  align-items: center;
+  padding-block: clamp(2.5rem, 6vw, 4.5rem);
+}
+
+@media (min-width: 52em) {
+  .season-hero {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.season-hero h1 {
+  font-size: clamp(2.5rem, 7vw, 4.25rem);
+}
+
+.season-hero__years {
+  color: var(--paper-dim);
+  font-size: 0.95rem;
+  margin-top: 0.5rem;
+}
+
+.season-hero__art img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.narration {
+  border-left: 2px solid var(--brass-dim);
+  padding-left: 1.25rem;
+  font-family: var(--serif);
+  font-size: 1.05rem;
+  font-style: italic;
+  color: var(--paper-dim);
+  max-width: var(--measure);
+}
+
+/* ---------- Éditions ---------- */
+
+.editions {
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+}
+
+/* Une seule édition : la carte ne s'étire pas sur toute la largeur. */
+.editions--single {
+  grid-template-columns: minmax(0, 32rem);
+}
+
+.edition {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: clamp(1.25rem, 3vw, 2rem);
+  background: var(--ink-raised);
+  border: 1px solid var(--ink-line);
+}
+
+.edition h2,
+.edition h3 {
+  font-size: 1.5rem;
+}
+
+.edition dl {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--paper-dim);
+}
+
+.edition dt {
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  color: var(--paper);
+  margin-top: 1rem;
+}
+
+.edition dd {
+  margin: 0.35rem 0 0;
+}
+
+.edition ul {
+  margin: 0.35rem 0 0;
+  padding-left: 1.1rem;
+}
+
+.edition .button {
+  margin-top: auto;
+  align-self: flex-start;
+}
+
+/* ---------- Galerie ---------- */
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: 0.75rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.gallery img {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border: 1px solid var(--ink-line);
+}
+
+/* ---------- Navigation entre saisons ---------- */
+
+.season-pager {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 0.9rem;
+}
+
+.season-pager a {
+  text-decoration: none;
+  color: var(--paper-dim);
+}
+
+.season-pager a:hover {
+  color: var(--brass);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+/* ---------- Titres et intertitres ---------- */
+
+.hero-title {
+  font-size: clamp(2.75rem, 8vw, 5rem);
+  max-width: 18ch;
+}
+
+.section-title {
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+}
+
+.section-subtitle {
+  font-size: 1.35rem;
+  margin-top: 2.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.lede {
+  max-width: var(--measure);
+  margin-top: 1rem;
+  color: var(--paper-dim);
+}
+
+.stack {
+  margin-top: 2rem;
+}
+
+.stack--wide {
+  margin-top: 2.5rem;
+}
+
+.stack--wider {
+  margin-top: 3rem;
+}
+
+.actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.note {
+  margin-top: 1.5rem;
+  font-size: 0.85rem;
+  color: var(--paper-dim);
+}
+
+.edition p {
+  color: var(--paper-dim);
+  font-size: 0.9rem;
+}
+
+.edition .actions {
+  margin-top: auto;
+}
+
+/* ---------- Guide des épisodes ---------- */
+
+.episodes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  counter-reset: episode;
+}
+
+.episode {
+  display: grid;
+  gap: 0.5rem 2rem;
+  padding-block: clamp(1.5rem, 3vw, 2.25rem);
+  border-top: 1px solid var(--ink-line);
+}
+
+@media (min-width: 46em) {
+  .episode {
+    grid-template-columns: 9rem 1fr;
+  }
+}
+
+.episode__number {
+  font-family: var(--sans);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--brass);
+  margin: 0;
+}
+
+.episode__title {
+  font-size: 1.25rem;
+}
+
+.episode__meta {
+  margin: 0.35rem 0 0.9rem;
+  max-width: var(--measure);
+  font-size: 0.8rem;
+  color: var(--paper-dim);
+}
+
+.episode__resume {
+  max-width: var(--measure);
+}
+
+.episode__cast {
+  margin: 0.75rem 0 0;
+  max-width: var(--measure);
+  font-size: 0.8rem;
+  color: var(--paper-dim);
+}
+
+/* ---------- Distribution ---------- */
+
+.cast {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+  gap: 1.25rem 2rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.cast__actor {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: 1.05rem;
+}
+
+.cast__character {
+  margin: 0.15rem 0 0;
+  font-size: 0.85rem;
+  color: var(--paper-dim);
+}
+
+/* ---------- Notes d'épisode ---------- */
+
+.episode__notes {
+  margin-top: 1rem;
+  max-width: var(--measure);
+  font-size: 0.9rem;
+  color: var(--paper-dim);
+}
+
+.episode__notes summary {
+  cursor: pointer;
+  font-family: var(--sans);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--brass);
+}
+
+.episode__notes p {
+  margin-top: 0.85rem;
+}
+
+/* ---------- Bandeau d'accueil ---------- */
+/* Toute la ligne de flottaison ; le mouvement (zoom lent, parallaxe, révélation
+   de la section suivante) est ajouté par src/lib/motionEngine.ts et n'existe
+   qu'avec le mouvement autorisé — cette feuille de style seule donne déjà une
+   page complète et immobile. */
+
+.hero {
+  position: relative;
+  z-index: 0;
+  display: grid;
+  align-items: end;
+  min-height: 100svh;
+  min-height: 100vh;
+  padding-block: clamp(4rem, 10vh, 7rem);
+  overflow: clip;
+}
+
+.hero__media {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.hero__video {
+  position: absolute;
+  inset: -2% -2%;
+  width: 104%;
+  height: 104%;
+  object-fit: cover;
+}
+
+/* Le teaser est contrasté : sans voile, le titre y devient illisible. Le
+   dégradé tire légèrement vers le bleu marine des jaquettes plutôt que vers
+   un noir neutre. */
+.hero__scrim {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to top, var(--ink) 2%, color-mix(in srgb, var(--steel-2) 75%, transparent) 42%, color-mix(in srgb, var(--steel-2) 55%, transparent) 100%),
+    linear-gradient(to right, color-mix(in srgb, var(--ink) 55%, transparent) 25%, transparent 70%);
+}
+
+.hero__content {
+  position: relative;
+  z-index: 1;
+}
+
+.hero .eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.hero .hero-title {
+  font-size: clamp(2.25rem, 5.4vw, 3.85rem);
+  max-width: 21ch;
+  text-shadow: 0 2px 28px rgb(0 0 0 / 50%);
+}
+
+/* Trait qui se tire de gauche à droite au chargement — respiration entre le
+   titre et les actions, plus discret qu'un bloc de boutons collé au texte. */
+.hero__rule {
+  display: block;
+  width: 5rem;
+  height: 1px;
+  margin: 1.75rem 0;
+  background: var(--brass-dim);
+  transform-origin: left center;
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: clamp(1.25rem, 3vw, 2.25rem);
+}
+
+/* L'action principale reste un lien typographique, pas un bloc de couleur :
+   dans un bandeau déjà chargé d'image, un bouton plein ferait concurrence au
+   visuel plutôt que de le prolonger. */
+.link-arrow {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  font-family: var(--serif);
+  font-size: 1.05rem;
+  text-decoration: none;
+  color: var(--paper);
+  border-bottom: 1px solid var(--brass-dim);
+  padding-bottom: 0.15rem;
+  width: fit-content;
+}
+
+.link-arrow:hover {
+  border-bottom-color: var(--brass);
+  color: var(--brass-bright);
+}
+
+.link-arrow span {
+  transition: transform 0.25s ease;
+}
+
+.link-arrow:hover span {
+  transform: translateX(0.25rem);
+}
+
+.hero__link {
+  font-size: 0.85rem;
+  color: var(--paper-dim);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+}
+
+.hero__link:hover {
+  color: var(--paper);
+  border-bottom-color: var(--ink-line);
+}
+
+.hero__play {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.5rem 1rem 0.5rem 0.6rem;
+  font: inherit;
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  color: var(--paper);
+  background: color-mix(in srgb, var(--ink) 35%, transparent);
+  border: 1px solid color-mix(in srgb, var(--paper) 30%, transparent);
+  border-radius: 999px;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+}
+
+.hero__play:hover {
+  border-color: var(--brass);
+  color: var(--brass-bright);
+}
+
+.hero__play-icon {
+  display: grid;
+  place-items: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 50%;
+  border: 1px solid currentColor;
+  font-size: 0.55rem;
+}
+
+/* Indication de défilement : décorative, jamais la seule façon de comprendre
+   qu'il y a davantage de contenu — la page défile normalement sans elle. */
+.hero__scroll-cue {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(1.5rem, 4vh, 2.75rem);
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  transform: translateX(-50%);
+  text-decoration: none;
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--paper-dim);
+}
+
+.hero__scroll-cue:hover {
+  color: var(--paper);
+}
+
+.hero__scroll-cue-track {
+  position: relative;
+  width: 1px;
+  height: 2.75rem;
+  background: color-mix(in srgb, var(--paper) 25%, transparent);
+  overflow: hidden;
+}
+
+.hero__scroll-cue-thumb {
+  position: absolute;
+  inset: 0;
+  background: var(--brass);
+  transform: translateY(-100%);
+}
+
+html[data-motion='on'] .hero__scroll-cue-thumb {
+  animation: hero-cue 2.2s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+
+@keyframes hero-cue {
+  0% { transform: translateY(-100%); }
+  50% { transform: translateY(0); }
+  100% { transform: translateY(100%); }
+}
+
+/* ---------- Section « statement » ---------- */
+/* Révélée par-dessus le bandeau au scroll quand le mouvement est permis ;
+   simple section qui suit le bandeau dans le flux sinon. */
+
+.statement {
+  position: relative;
+  z-index: 1;
+  background: var(--ink);
+  padding-block: clamp(5rem, 14vh, 9rem);
+}
+
+.statement__quote {
+  font-family: var(--serif);
+  font-size: clamp(1.6rem, 3.6vw, 2.75rem);
+  line-height: 1.35;
+  max-width: 22ch;
+  color: var(--paper);
+}
+
+.statement__body {
+  display: grid;
+  gap: clamp(2rem, 6vw, 5rem);
+  margin-top: clamp(2.5rem, 6vw, 4rem);
+}
+
+@media (min-width: 56em) {
+  .statement__body {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+  }
+}
+
+.statement__text {
+  max-width: var(--measure);
+  color: var(--paper-dim);
+}
+
+
+/* ---------- Bande-annonce ---------- */
+
+.trailer {
+  width: min(92vw, 64rem);
+  padding: 0;
+  border: 1px solid var(--ink-line);
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.trailer::backdrop {
+  background: rgb(0 0 0 / 82%);
+}
+
+.trailer__video {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #000;
+}
+
+.trailer__close {
+  position: absolute;
+  top: 0.25rem;
+  right: 0.25rem;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  font-size: 1.6rem;
+  line-height: 1;
+  color: var(--paper);
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.trailer__close:hover {
+  color: var(--brass);
+}
+
+/* ---------- Photos agrandissables ---------- */
+
+.photo {
+  display: block;
+  cursor: zoom-in;
+}
+
+.photo img {
+  display: block;
+  transition: opacity 0.2s;
+}
+
+.photo:hover img {
+  opacity: 0.82;
+}
+
+.lightbox {
+  width: min(94vw, 88rem);
+  max-width: none;
+  max-height: 94vh;
+  padding: 0;
+  border: 0;
+  background: none;
+  overflow: visible;
+}
+
+.lightbox::backdrop {
+  background: rgb(0 0 0 / 88%);
+}
+
+.lightbox__image {
+  display: block;
+  width: 100%;
+  max-height: 94vh;
+  object-fit: contain;
+  margin-inline: auto;
+}
+
+.lightbox__close {
+  position: fixed;
+  top: 0.5rem;
+  right: 1rem;
+  display: grid;
+  place-items: center;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  font-size: 2rem;
+  line-height: 1;
+  color: var(--paper);
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.lightbox__close:hover {
+  color: var(--brass);
+}
+
+/* ---------- Images d'épisode ---------- */
+
+.episode__images {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  gap: 0.6rem;
+  margin: 1.1rem 0 0;
+  padding: 0;
+  list-style: none;
+  max-width: var(--measure);
+}
+
+.episode__images img {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border: 1px solid var(--ink-line);
+}
+
+/* ---------- Visuels d'une édition ---------- */
+
+.visuals {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: end;
+  gap: 0.75rem;
+  margin: 0 0 0.5rem;
+  padding: 0;
+  list-style: none;
+}
+
+/* Chaque cadre garde la proportion de son visuel — le boîtier 3D est carré, le
+   dos est en portrait — et les deux reposent sur la même ligne de base. Des
+   dimensions définies évitent que la page saute au chargement des images. */
+.visuals li {
+  display: grid;
+  place-items: end center;
+  aspect-ratio: 1 / 1;
+}
+
+.visuals__dos {
+  aspect-ratio: 3 / 4;
+}
+
+/* Seul, le boîtier n'a pas de raison de se limiter à une demi-largeur. */
+.visuals--seul {
+  grid-template-columns: minmax(0, 14rem);
+}
+
+.visuals img {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  object-fit: contain;
+}
+
+/* Le dos est un à-plat imprimé : un filet le détache du fond. */
+.visuals__dos img {
+  border: 1px solid var(--ink-line);
+}
+
+/* ---------- Cartes intégrales ---------- */
+
+.integrale__editions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  gap: 1.5rem;
+  margin-top: 0.5rem;
+}
+
+.integrale__edition {
+  display: grid;
+  gap: 0.75rem;
+  justify-items: start;
+}
+
+.integrale__support {
+  margin: 0;
+  font-family: var(--sans);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--brass);
+}
+
+.integrale__edition .button {
+  align-self: flex-start;
+  margin-top: auto;
+}
+
+/* ---------- Article de fond ---------- */
+
+.article p {
+  margin-bottom: 1.35em;
+}
+
+.article__partie {
+  margin: 3rem 0 1.25rem;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+}
+
+.article__section {
+  margin: 2.5rem 0 0.75rem;
+  font-family: var(--sans);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  color: var(--brass);
+}
+
+/* Le premier paragraphe d'une partie porte l'entrée en matière. */
+.article__partie + p {
+  font-size: 1.1em;
+  color: var(--paper);
+}
+
+/* ---------- Utilitaires d'accessibilité ---------- */
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Mode contraste renforcé (Windows) : les affordances qui reposaient sur une
+   couleur de fond retrouvent un contour, la couleur système reprend la main. */
+@media (forced-colors: active) {
+  .button,
+  .link-arrow,
+  .hero__play,
+  .motion-toggle {
+    border: 1px solid CanvasText;
+  }
+
+  .season-card__art,
+  .filmstrip__art,
+  .edition,
+  .visuals__dos img {
+    border: 1px solid CanvasText;
+  }
+}
+
+/* Le mouvement peut être coupé deux façons : la préférence système, ou ce
+   bouton — pour qui ne peut pas changer les réglages de l'appareil qu'il
+   utilise. Un rechargement suit le choix : rien n'est laissé à mi-course. */
+.motion-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.75rem;
+  font: inherit;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  color: var(--paper-dim);
+  background: none;
+  border: 1px solid var(--ink-line);
+  border-radius: 999px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.motion-toggle:hover {
+  color: var(--paper);
+  border-color: var(--brass-dim);
+}
+
+.motion-toggle__dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--paper-dim);
+}
+
+.motion-toggle[aria-pressed='true'] .motion-toggle__dot {
+  background: var(--brass);
+}
+
+/* ---------- Galerie horizontale des saisons (accueil) ---------- */
+/* Rangée déroulante native par défaut — accessible au clavier et au tactile
+   sans une ligne de JavaScript. Sur grand écran, avec le mouvement autorisé,
+   src/lib/motionEngine.ts l'épingle et la fait défiler à l'horizontale au
+   scroll ; la classe .filmstrip--cinematic n'est alors posée qu'une fois
+   l'épinglage effectivement en place. */
+
+.filmstrip {
+  position: relative;
+}
+
+.filmstrip__viewport {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity;
+  scrollbar-color: var(--ink-line) transparent;
+}
+
+.filmstrip--cinematic .filmstrip__viewport {
+  overflow: hidden;
+  scroll-snap-type: none;
+}
+
+.filmstrip__track {
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(1.1rem, 2.5vw, 1.75rem);
+  width: max-content;
+  padding: 0.5rem max(1.25rem, calc((100vw - var(--page)) / 2)) 2.5rem;
+}
+
+.filmstrip__card {
+  flex: 0 0 auto;
+  display: grid;
+  gap: 0.85rem;
+  width: clamp(11.5rem, 21vw, 15.5rem);
+  scroll-snap-align: start;
+  text-decoration: none;
+}
+
+.filmstrip__art {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  background: var(--ink-raised);
+  overflow: hidden;
+}
+
+.filmstrip__art img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  object-fit: contain;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.filmstrip__card:hover .filmstrip__art img,
+.filmstrip__card:focus-visible .filmstrip__art img {
+  transform: scale(1.035);
+}
+
+/* Canevas Three.js de distorsion au survol : un décor superposé au vrai
+   visuel, jamais un substitut — masqué pour les technologies d'assistance et
+   sans incidence sur le lien ou l'image qu'il recouvre. */
+.filmstrip__canvas {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.filmstrip__canvas--active {
+  opacity: 1;
+}
+
+.filmstrip__number {
+  font-family: var(--serif);
+  font-size: 1.15rem;
+  color: var(--paper);
+}
+
+.filmstrip__meta {
+  margin-top: 0.15rem;
+  font-size: 0.75rem;
+  color: var(--paper-dim);
+}
+
+.filmstrip__end {
+  margin-top: 1.75rem;
+}
+
+/* ---------- Cartes intégrales — teinte acier ---------- */
+
+.integrale {
+  background: linear-gradient(155deg, var(--steel) 0%, var(--ink-raised) 65%);
+}
+
+/* ---------- Sommaire d'article ---------- */
+
+.sommaire {
+  display: grid;
+  gap: 1rem;
+  max-width: var(--measure);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: partie;
+}
+
+.sommaire li {
+  display: grid;
+  gap: 0.15rem;
+  padding-left: 2rem;
+  position: relative;
+}
+
+.sommaire li::before {
+  counter-increment: partie;
+  content: counter(partie);
+  position: absolute;
+  left: 0;
+  font-family: var(--serif);
+  color: var(--brass);
+}
+
+.sommaire a {
+  font-family: var(--serif);
+  font-size: 1.15rem;
+  text-decoration: none;
+  border-bottom: 1px solid var(--ink-line);
+  justify-self: start;
+}
+
+.sommaire a:hover {
+  border-bottom-color: var(--brass);
+}
+
+.sommaire span {
+  font-size: 0.85rem;
+  color: var(--paper-dim);
+}

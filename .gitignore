@@ -1,0 +1,11 @@
+# Dépendances et build — régénérés par npm install / npm run build.
+node_modules/
+dist/
+.astro/
+
+# macOS
+.DS_Store
+
+# Cache d'octets Python.
+__pycache__/
+*.pyc

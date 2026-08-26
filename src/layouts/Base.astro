@@ -1,0 +1,114 @@
+---
+import type { ImageMetadata } from 'astro';
+import { getImage } from 'astro:assets';
+
+import MotionToggle from '../components/MotionToggle.astro';
+import { IS_PREVIEW } from '../lib/env';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+  /** Chemin de la page courante, pour marquer l’entrée de menu active. */
+  path?: string;
+  /** Vignette affichée quand la page est partagée. */
+  image?: ImageMetadata;
+  /** Données structurées de la page, pour les moteurs de recherche. */
+  schema?: unknown;
+}
+
+const { title, description, path = Astro.url.pathname, image, schema } = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site);
+
+// Les réseaux sociaux exigent une adresse absolue, et n’acceptent pas tous le
+// WebP : la vignette de partage est produite en JPEG.
+const partage = image
+  ? await getImage({ src: image, width: 1200, format: 'jpeg', quality: 82 })
+  : undefined;
+const partageUrl = partage ? new URL(partage.src, Astro.site).href : undefined;
+const nav = [
+  { href: '/', label: 'Accueil' },
+  { href: '/toutes-les-saisons/', label: 'Toutes les saisons' },
+  { href: '/la-serie/', label: 'La série' },
+  { href: '/law-order-true-crime/', label: 'True Crime' },
+];
+const year = new Date().getFullYear();
+---
+
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical.href} />
+    {IS_PREVIEW && <meta name="robots" content="noindex, nofollow" />}
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="fr_FR" />
+    <meta property="og:site_name" content="Law&Order.shop" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical.href} />
+    {partageUrl && <meta property="og:image" content={partageUrl} />}
+    {partageUrl && <meta property="og:image:alt" content={title} />}
+    <meta name="twitter:card" content={partageUrl ? 'summary_large_image' : 'summary'} />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    {
+      schema && (
+        <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+      )
+    }
+  </head>
+  <body>
+    <script>import '../lib/motion';</script>
+
+    <a class="skip-link" href="#contenu">Aller au contenu</a>
+
+    <header class="site-header">
+      <div class="page site-header__inner">
+        <a class="wordmark" href="/">
+          New York Police Judiciaire
+          <span>Law &amp; Order</span>
+        </a>
+        <div class="site-header__actions">
+          <nav class="site-nav" aria-label="Navigation principale">
+            {
+              nav.map((item) => (
+                <a href={item.href} aria-current={path === item.href ? 'page' : undefined}>
+                  {item.label}
+                </a>
+              ))
+            }
+          </nav>
+          <MotionToggle />
+        </div>
+      </div>
+    </header>
+
+    <main id="contenu">
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="page">
+        <p>
+          Les coffrets DVD et Blu-ray sont édités et vendus par <a
+            href="https://www.elephantfilms.com/">Elephant Films</a>. Ce site présente les éditions ;
+          les commandes sont traitées sur leur boutique.
+        </p>
+        <p class="site-footer__links">
+          <a href="/contact/">Contact</a>
+          <a href="/mention-legale/">Mentions légales</a>
+        </p>
+        <p class="site-footer__legal">
+          Law &amp; Order © Universal City Studios, Inc. Tous droits réservés. Layout &amp; Design ©
+          Universal Studios. Tous droits réservés. Layout &amp; Design par Elysées Editions sous
+          licence exclusive d’Universal Studios. © {year} Elephant Films. Tous droits réservés.
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>

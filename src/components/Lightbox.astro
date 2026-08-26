@@ -1,0 +1,41 @@
+---
+/**
+ * Agrandissement des photos. Chaque vignette est un lien vers sa version
+ * grand format : sans JavaScript l’image s’ouvre normalement, avec JavaScript
+ * elle s’affiche par-dessus la page.
+ */
+---
+
+<dialog class="lightbox" data-lightbox-dialog aria-label="Photo en grand format">
+  <button class="lightbox__close" type="button" data-lightbox-close aria-label="Fermer">×</button>
+  <img class="lightbox__image" data-lightbox-image alt="" />
+</dialog>
+
+<script>
+  const dialog = document.querySelector<HTMLDialogElement>('[data-lightbox-dialog]');
+  const image = document.querySelector<HTMLImageElement>('[data-lightbox-image]');
+
+  document.addEventListener('click', (event) => {
+    const target = event.target as HTMLElement | null;
+    const link = target?.closest<HTMLAnchorElement>('[data-lightbox]');
+    // Un clic modifié doit garder son sens : ouvrir dans un autre onglet.
+    if (!link || event.metaKey || event.ctrlKey || event.shiftKey || event.button !== 0) return;
+
+    event.preventDefault();
+    if (!dialog || !image) return;
+    image.src = link.href;
+    image.alt = link.querySelector('img')?.alt ?? '';
+    dialog.showModal();
+    document.dispatchEvent(new Event('dialog:open'));
+  });
+
+  const close = () => dialog?.close();
+  document.querySelector('[data-lightbox-close]')?.addEventListener('click', close);
+  dialog?.addEventListener('click', (event) => {
+    if (event.target === dialog) close();
+  });
+  dialog?.addEventListener('close', () => {
+    if (image) image.removeAttribute('src');
+    document.dispatchEvent(new Event('dialog:close'));
+  });
+</script>

@@ -1,0 +1,53 @@
+---
+/**
+ * Les visuels d’une édition : le boîtier en 3D et, si on le demande, le dos de
+ * sa jaquette — accroche, résumé, caractéristiques et code-barres tels qu’ils
+ * sont imprimés. Les deux s’agrandissent au clic ; le dos ne se lit qu’en grand,
+ * ce qui le réserve aux fiches détaillées.
+ */
+import type { ImageMetadata } from 'astro';
+
+import Photo from './Photo.astro';
+import type { Edition } from '../lib/seasons';
+
+interface Props {
+  edition: Edition;
+  /** Ce que l’édition désigne, pour les textes alternatifs : « saison 12 ». */
+  contexte: string;
+  /** À laisser à false là où la vignette serait trop petite pour être lue. */
+  montrerDos?: boolean;
+}
+
+const { edition, contexte, montrerDos = true } = Astro.props;
+
+const visuels = [
+  edition.packshot && {
+    src: edition.packshot,
+    alt: `Coffret ${edition.label} de la ${contexte}`,
+    classe: undefined,
+  },
+  montrerDos &&
+    edition.dos && {
+      src: edition.dos,
+      alt: `Dos de la jaquette ${edition.label} de la ${contexte}`,
+      classe: 'visuals__dos',
+    },
+].filter((v) => Boolean(v)) as { src: ImageMetadata; alt: string; classe?: string }[];
+---
+
+{
+  visuels.length > 0 && (
+    <ul class:list={['visuals', visuels.length === 1 && 'visuals--seul']}>
+      {visuels.map((visuel) => (
+        <li class={visuel.classe}>
+          <Photo
+            src={visuel.src}
+            alt={visuel.alt}
+            widths={[220, 360, 520]}
+            sizes="(min-width: 52em) 11rem, 40vw"
+          />
+        </li>
+      ))}
+    </ul>
+  )
+}
