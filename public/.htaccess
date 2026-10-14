@@ -1,4 +1,5 @@
 # Règles de cache du site statique.
+ErrorDocument 404 /404.html
 #
 # Sans elles, un navigateur peut resservir une page HTML déjà téléchargée et
 # continuer d'afficher la version précédente longtemps après une mise en ligne.

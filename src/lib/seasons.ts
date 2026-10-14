@@ -1,7 +1,9 @@
 import type { ImageMetadata } from 'astro';
 
 import bookletData from '../data/booklet.json';
+import earlyEpisodesData from '../data/early-episodes.json';
 import episodesData from '../data/episodes.json';
+import supplementsData from '../data/episode-supplements.json';
 import imagesData from '../data/images.json';
 import seasonsData from '../data/seasons.json';
 import shopLinks from '../data/shop-links.json';
@@ -27,7 +29,9 @@ export interface Episode {
   diffusion?: { chaine: string; date: string };
   credits: string[];
   resume?: string;
+  resumeSourceUrl?: string;
   casting?: string;
+  castingLabel?: string;
   notes: string[];
   /** Photos de production identifiées comme illustrant cet épisode. */
   images: ImageMetadata[];
@@ -46,10 +50,11 @@ export interface Season {
   accroche?: string;
   accrocheSecondaire?: string;
   editions: Edition[];
-  photos: ImageMetadata[];
+  photos: { image: ImageMetadata; episode?: number }[];
   href: string;
-  /** Renseignés pour les saisons couvertes par un guide des épisodes (6 à 15). */
+  /** Renseignés pour les saisons couvertes par un guide des épisodes (1 à 15). */
   starring: Role[];
+  starringNotes: string[];
   episodes: Episode[];
 }
 
@@ -114,6 +119,7 @@ interface SeasonImages {
   packshots: Partial<Record<SupportId, string>>;
   dos: Partial<Record<SupportId, string>>;
   photos: string[];
+  photoEpisodes?: (number | null)[];
   episodes: Record<string, string[]>;
 }
 
@@ -130,14 +136,14 @@ const images = imagesData as ImageManifest;
 type RawEpisode = Omit<Episode, 'images'>;
 
 /**
- * Deux sources se partagent le guide : le livret du coffret pour les saisons 6
- * à 10, le document de travail pour les saisons 11 à 15. Leurs saisons ne se
- * recouvrent pas ; si cela changeait, le document de travail primerait.
+ * Trois sources couvrent les saisons 1 à 15 : Word (1–5), livret PDF (6–10)
+ * et document ODT (11–15). Les informations absentes des sources restent vides.
  */
-const guide = { ...bookletData, ...episodesData } as Record<
+const guide = { ...earlyEpisodesData, ...bookletData, ...episodesData } as Record<
   string,
-  { starring: Role[]; episodes: RawEpisode[] } | undefined
+  { starring: Role[]; episodes: RawEpisode[]; notes?: string[] } | undefined
 >;
+const supplements = supplementsData.episodes as Record<string, Record<string, { titreVo: string; resume: string; sourceUrl: string }> | undefined>;
 
 export const seasons: Season[] = (seasonsData as RawSeason[]).map((raw) => {
   const seasonImages = images.seasons[String(raw.number)];
@@ -170,18 +176,27 @@ export const seasons: Season[] = (seasonsData as RawSeason[]).map((raw) => {
     accroche: maybeTypo(raw.accroche),
     accrocheSecondaire: maybeTypo(raw.accroche_secondaire),
     editions,
-    photos: (seasonImages?.photos ?? []).map(asset).filter((i): i is ImageMetadata => Boolean(i)),
+    photos: (seasonImages?.photos ?? []).flatMap((relative, i) => {
+      const image = asset(relative);
+      return image ? [{ image, episode: seasonImages?.photoEpisodes?.[i] ?? undefined }] : [];
+    }),
     href: `/toutes-les-saisons/saison-${raw.number}/`,
     starring: guide[String(raw.number)]?.starring ?? [],
-    episodes: (guide[String(raw.number)]?.episodes ?? []).map((episode) => ({
-      ...episode,
-      titre: typo(episode.titre),
-      resume: maybeTypo(episode.resume),
-      notes: episode.notes.map((note) => typo(note)),
-      images: (seasonImages?.episodes[String(episode.numero)] ?? [])
-        .map(asset)
-        .filter((i): i is ImageMetadata => Boolean(i)),
-    })),
+    starringNotes: (guide[String(raw.number)]?.notes ?? []).map(typo),
+    episodes: (guide[String(raw.number)]?.episodes ?? []).map((episode) => {
+      const extra = !episode.resume ? supplements[String(raw.number)]?.[String(episode.numero)] : undefined;
+      if (extra && extra.titreVo !== episode.titreVo) throw new Error(`Titre VO du complément incompatible : S${raw.number}E${episode.numero}`);
+      return {
+        ...episode,
+        titre: typo(episode.titre),
+        resume: maybeTypo(episode.resume ?? extra?.resume),
+        resumeSourceUrl: extra?.sourceUrl,
+        notes: episode.notes.map((note) => typo(note)),
+        images: (seasonImages?.episodes[String(episode.numero)] ?? [])
+          .map(asset)
+          .filter((i): i is ImageMetadata => Boolean(i)),
+      };
+    }),
   };
 });
 
@@ -191,14 +206,18 @@ export interface Integrale {
   editions: Edition[];
 }
 
-export const integrales: Integrale[] = Object.entries(shopLinks.integrales).map(
-  ([range, urls]) => ({
+const integraleLinks = shopLinks.integrales as Record<string, Partial<Record<SupportId, string>>>;
+export const integrales: Integrale[] = [...new Set([
+  ...Object.keys(images.integrales),
+  ...Object.keys(integraleLinks),
+])].sort((a, b) => Number(a.split('-')[0]) - Number(b.split('-')[0])).map(
+  (range) => ({
     range,
     label: `Intégrale des saisons ${range.replace('-', ' à ')}`,
     editions: (['bluray', 'dvd'] as const).map((support) => ({
       support,
       label: SUPPORT_LABELS[support],
-      url: (urls as Record<SupportId, string>)[support],
+      url: integraleLinks[range]?.[support],
       ean: images.integrales[range]?.[support]?.ean,
       packshot: asset(images.integrales[range]?.[support]?.packshot),
       dos: asset(images.integrales[range]?.[support]?.dos),

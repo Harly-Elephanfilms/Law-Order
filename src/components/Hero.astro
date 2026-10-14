@@ -21,9 +21,9 @@ const { secondary } = Astro.props;
   <div class="hero__media" data-hero-media>
     <video
       class="hero__video"
-      src="/media/hero-loop.mp4"
+      data-loop-src="/media/hero-loop.mp4"
       poster="/media/hero-poster.webp"
-      autoplay
+      preload="none"
       muted
       loop
       playsinline
@@ -34,15 +34,17 @@ const { secondary } = Astro.props;
   </div>
 
   <div class="page hero__content">
-    <p class="eyebrow" data-hero-eyebrow>Édition intégrale restaurée</p>
+    <p class="eyebrow" data-hero-eyebrow>New York Police Judiciaire · Law &amp; Order</p>
     <h1 class="hero-title" data-hero-title>
       {typo('Quinze saisons, une seule question : la justice a-t-elle été rendue ?')}
     </h1>
+    <p class="hero__offer">15 saisons restaurées en coffrets DVD et Blu-ray, éditées par Elephant Films.</p>
     <span class="hero__rule" data-hero-rule aria-hidden="true"></span>
     <div class="hero__actions" data-hero-actions>
       <a class="link-arrow" href="/toutes-les-saisons/">
         Parcourir les saisons<span aria-hidden="true">→</span>
       </a>
+      <a class="hero__link" href="#integrales">Découvrir les coffrets</a>
       <a class="hero__link" href={secondary.href}>{secondary.label}</a>
       <button class="hero__play" type="button" data-trailer-open>
         <span class="hero__play-icon" aria-hidden="true">▶</span>
@@ -76,7 +78,7 @@ const { secondary } = Astro.props;
 
   document.querySelector('[data-trailer-open]')?.addEventListener('click', () => {
     dialog?.showModal();
-    video?.play();
+    video?.play()?.catch(() => { /* Les contrôles restent disponibles si la lecture automatique est refusée. */ });
     document.dispatchEvent(new Event('dialog:open'));
   });
 
@@ -108,9 +110,16 @@ const { secondary } = Astro.props;
     return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   }
 
-  if (motionRefused()) {
-    const loop = document.querySelector<HTMLVideoElement>('.hero__video');
-    loop?.pause();
-    loop?.removeAttribute('autoplay');
+  const loop = document.querySelector<HTMLVideoElement>('.hero__video');
+  const connection = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }).connection;
+  const desktop = window.matchMedia('(min-width: 64em) and (hover: hover) and (pointer: fine)').matches;
+  const slowConnection = connection?.saveData || /(^|-)2g$/.test(connection?.effectiveType ?? '');
+  if (loop && desktop && !motionRefused() && !slowConnection) {
+    loop.src = loop.dataset.loopSrc!;
+    void loop.play().catch(() => { /* Le poster tient lieu de fond. */ });
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) loop.pause();
+      else void loop.play().catch(() => {});
+    });
   }
 </script>

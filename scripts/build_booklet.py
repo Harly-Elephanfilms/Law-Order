@@ -19,16 +19,15 @@ texte est coupé en lignes de composition — césures comprises.
 Le résultat est fusionné dans src/data/episodes.json par build_episodes.py.
 """
 import json
+from copy import deepcopy
 import re
 import sys
 from pathlib import Path
 
 from pypdf import PdfReader
 
-SOURCE = Path(
-    "/Users/harly/Desktop/LAW & ORDER VOL. 3/LIVRET/Livret_Law_S6a10-96p-hd.pdf"
-)
 ROOT = Path(__file__).resolve().parent.parent
+SOURCE = ROOT.parent / "LIVRET/Livret_Law_S6a10-96p-hd.pdf"
 DEST = ROOT / "src/data/booklet.json"
 
 SEASON_HEADING = re.compile(r"^SAISON (10|[6-9])\b.*$")
@@ -47,7 +46,7 @@ FIN_DU_GENERIQUE = (
     "Producteur", "Co-producteur", "Musique", "Directeur", "Story editor",
     "Executive story", "SUPPLÉMENTS", "Montage",
 )
-EPISODE_HEADING = re.compile(r"^Episode\s+(\d+)\s*[-–]\s*(.+)$")
+EPISODE_HEADING = re.compile(r"^Episode\s+(\d+)(?:\s*&\s*\d+)?\s*[-–]\s*(.+)$")
 # La diffusion s'écrit « Diffusion US : NBC, 18 octobre 1995 » dans la saison 6,
 # puis « NBC, 18 septembre 1996 » à partir de la saison 7. Même chose pour la
 # réalisation, tour à tour « Réalisateur : X » et « Réalisé par X ».
@@ -272,11 +271,31 @@ def main():
     for rang, debut in enumerate(debuts):
         fin = debuts[rang + 1] if rang + 1 < len(debuts) else len(lines)
         for j in range(debut + 1, fin):
-            if saison_de[j] != saison_de[debut]:
+            if saison_de[j] != saison_de[debut] or lines[j].startswith("TELEFILM -"):
                 fin = j
                 break
         episode = parse_episode(lines[debut:fin])
-        saisons.setdefault(saison_de[debut], {}).setdefault(episode["numero"], episode)
+        entries = [episode]
+        if paired := re.match(r"^Episode\s+(\d+)\s*&\s*(\d+)\s*[-–]", lines[debut]):
+            # Le livret réunit Refuge I et II. Le premier résumé se termine
+            # par « ... » ; le second est donc jusque-là absorbé dans les notes.
+            second = deepcopy(episode)
+            second["numero"] = int(paired.group(2))
+            second_story = episode["notes"][0]
+            story, separator, ending = second_story.partition("...")
+            if not separator or not second_story.startswith("La mafia découvre"):
+                raise ValueError("Résumé de la seconde partie de Refuge non reconnu")
+            common_notes = episode["notes"][1:]
+            episode["notes"] = common_notes
+            second["resume"] = story + "..."
+            second["notes"] = ([ending.strip()] if ending.strip() else []) + common_notes
+            for entry, part, roman in ((episode, "1re", "I"), (second, "2e", "II")):
+                entry["titre"] = re.sub(r"\([^)]*parties\)", f"({part} partie)", entry["titre"])
+                entry["titreVo"] = f"Refuge (Part {roman})"
+                entry["castingLabel"] = "Distribution des deux parties :"
+            entries.append(second)
+        for entry in entries:
+            saisons.setdefault(saison_de[debut], {}).setdefault(entry["numero"], entry)
 
     data = {
         str(s): {
@@ -285,6 +304,13 @@ def main():
         }
         for s in sorted(saisons)
     }
+    overrides = ROOT / "src/data/booklet.overrides.json"
+    if overrides.exists():
+        for season, entries in json.loads(overrides.read_text(encoding="utf8")).get("seasons", {}).items():
+            current = {entry["numero"]: entry for entry in data[season]["episodes"]}
+            for entry in entries:
+                current[entry["numero"]] = entry
+            data[season]["episodes"] = [current[n] for n in sorted(current)]
     DEST.parent.mkdir(parents=True, exist_ok=True)
     DEST.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf8")
 

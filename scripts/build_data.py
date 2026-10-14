@@ -14,12 +14,9 @@ import re
 import sys
 from pathlib import Path
 
-import openpyxl
-from pypdf import PdfReader
-
-SOURCE = Path("/Users/harly/Desktop/LAW & ORDER VOL. 3")
 ROOT = Path(__file__).resolve().parent.parent
-IMG_EXT = {".png", ".jpg", ".jpeg", ".tif", ".webp"}
+SOURCE = ROOT.parent
+IMG_EXT = {".png", ".jpg", ".jpeg", ".tif", ".tiff", ".webp"}
 
 FIP_LABELS = {
     "accroche": "accroche",
@@ -75,6 +72,7 @@ def support_of(path):
 
 def parse_fip(path):
     """Champs d'une fiche FIP, plus le support qu'elle décrit si détectable."""
+    import openpyxl
     ws = openpyxl.load_workbook(path, data_only=True).worksheets[0]
     lines = []
     for row in ws.iter_rows(values_only=True):
@@ -130,6 +128,8 @@ def parse_jaquette(path):
     caractéristiques en puces, puis « SUPPLÉMENTS » et les bonus en puces —
     ce qui permet d'en tirer les deux blocs sans les ressaisir.
     """
+    from pypdf import PdfReader
+
     text = PdfReader(path).pages[0].extract_text() or ""
     text = re.sub(r"[ \t]+", " ", text)
     text = re.sub(r"\n{2,}", "\n", text).strip()
@@ -254,6 +254,45 @@ def collect(season):
 
 
 def main():
+    if "--images-only" in sys.argv:
+        dest = ROOT / "src/data/seasons.json"
+        seasons = json.loads(dest.read_text(encoding="utf8"))
+        selection = next((arg.split("=", 1)[1] for arg in sys.argv if arg.startswith("--seasons=")), None)
+        requested = set(map(int, selection.split(","))) if selection else {s["number"] for s in seasons}
+        if not requested or not requested.issubset({s["number"] for s in seasons}):
+            raise ValueError("Sélection de saisons invalide")
+        for season in seasons:
+            if season["number"] not in requested:
+                continue
+            base = SOURCE / f"SAISON {season['number']}"
+            if not base.is_dir():
+                raise FileNotFoundError(base)
+            season["photos"] = [
+                str(p.relative_to(SOURCE)) for p in sorted(base.rglob("*"))
+                if p.is_file() and not p.name.startswith(".") and p.suffix.lower() in IMG_EXT
+                and any("PHOTOS" in part.upper() or part.upper() == "PNG"
+                        for part in p.relative_to(base).parts[:-1])
+            ]
+            # Certains boîtiers et dos ont été renommés lors du transfert des
+            # sources. Retrouver les visuels par saison/support, sans réécrire
+            # les textes éditoriaux ni les caractéristiques des éditions.
+            for support, edition in season["supports"].items():
+                for field in ("packshot", "dos"):
+                    if edition.get(field) and (SOURCE / edition[field]).is_file():
+                        continue
+                    candidates = [
+                        p for p in sorted(base.rglob("*"))
+                        if p.is_file() and support_of(p) == support
+                        and (p.suffix.lower() == ".png" and "3D" in p.stem.upper()
+                             if field == "packshot"
+                             else p.suffix.lower() in IMG_EXT and re.search(r"-Dos\b", p.name, re.I))
+                    ]
+                    if len(candidates) != 1:
+                        raise ValueError(f"S{season['number']} {support} : {field} ambigu ou absent")
+                    edition[field] = str(candidates[0].relative_to(SOURCE))
+        dest.write_text(json.dumps(seasons, ensure_ascii=False, indent=2), encoding="utf8")
+        print(f"Inventaire des images actualisé — {len(requested)} saisons")
+        return 0
     links_path = ROOT / "src/data/shop-links.json"
     if not links_path.exists():
         print("src/data/shop-links.json absent : lancez d'abord scripts/fetch_shop_links.py",

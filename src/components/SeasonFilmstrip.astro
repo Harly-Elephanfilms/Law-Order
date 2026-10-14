@@ -1,12 +1,13 @@
 ---
 /**
- * Galerie horizontale des quinze saisons, pièce centrale de l'accueil.
+ * Galerie des quinze saisons, pièce centrale de l'accueil.
  *
- * Le balisage est le même quel que soit le mouvement autorisé : une rangée
+ * Le balisage est le même quel que soit le mouvement autorisé : une grille
  * de vraies vignettes (image, numéro, années), chacune un vrai lien vers sa
- * fiche saison. src/lib/motionEngine.ts décide seulement de la présentation —
- * rangée qui défile nativement, ou galerie épinglée qui se déroule avec le
- * scroll sur grand écran. Voir .filmstrip dans global.css.
+ * fiche saison, qui s'enroule sur autant de lignes que nécessaire — jamais
+ * de défilement horizontal séparé à réapprendre. src/lib/motionEngine.ts se
+ * contente d'y ajouter une entrée en fondu et, sur grand écran, une légère
+ * distorsion au survol. Voir .filmstrip dans global.css.
  */
 import { Image } from 'astro:assets';
 
@@ -29,10 +30,8 @@ const { seasons } = Astro.props;
       Chaque coffret réunit une saison complète, dans son format d'image respecté et l'ordre de
       diffusion original.
     </p>
-  </div>
 
-  <div class="filmstrip__viewport" data-filmstrip-viewport>
-    <ul class="filmstrip__track" data-filmstrip-track>
+    <ul class="filmstrip__grid" data-filmstrip-track>
       {
         seasons.map((season) => {
           const cover = season.editions.find((e) => e.packshot)?.packshot;
@@ -46,7 +45,7 @@ const { seasons } = Astro.props;
                       src={cover}
                       alt={`Coffret de la saison ${season.number} de New York Police Judiciaire`}
                       widths={[220, 320, 460]}
-                      sizes="(min-width: 64em) 16rem, 45vw"
+                      sizes="(min-width: 64em) 22vw, (min-width: 40em) 30vw, 45vw"
                       loading="lazy"
                     />
                   )}
@@ -62,11 +61,11 @@ const { seasons } = Astro.props;
         })
       }
     </ul>
-  </div>
 
-  <div class="page filmstrip__end">
-    <a class="link-arrow" href="/toutes-les-saisons/">
-      Voir toutes les saisons, saison par saison<span aria-hidden="true">→</span>
-    </a>
+    <p class="filmstrip__end">
+      <a class="link-arrow" href="/toutes-les-saisons/">
+        Voir toutes les saisons, saison par saison<span aria-hidden="true">→</span>
+      </a>
+    </p>
   </div>
 </section>

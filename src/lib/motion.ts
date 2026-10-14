@@ -78,6 +78,10 @@ async function start(): Promise<void> {
 
   if (!allowed) return;
 
+  // Sur téléphone et tablette, garder le défilement et les contenus natifs
+  // évite de télécharger GSAP et Three.js pour des effets discrets.
+  if (!window.matchMedia('(min-width: 64em) and (hover: hover) and (pointer: fine)').matches) return;
+
   const { initEngine } = await import('./motionEngine');
   initEngine();
 }

@@ -6,27 +6,62 @@
  */
 ---
 
-<dialog class="lightbox" data-lightbox-dialog aria-label="Photo en grand format">
-  <button class="lightbox__close" type="button" data-lightbox-close aria-label="Fermer">×</button>
-  <img class="lightbox__image" data-lightbox-image alt="" />
+<dialog class="lightbox" data-lightbox-dialog aria-label="Photos en grand format">
+  <div class="lightbox__frame">
+    <button class="lightbox__close" type="button" data-lightbox-close aria-label="Fermer la visionneuse">×</button>
+    <img class="lightbox__image" data-lightbox-image alt="" />
+    <div class="lightbox__toolbar">
+      <button type="button" class="lightbox__step" data-lightbox-previous aria-label="Photo précédente">←</button>
+      <p class="lightbox__caption" data-lightbox-caption aria-live="polite"></p>
+      <button type="button" class="lightbox__step" data-lightbox-next aria-label="Photo suivante">→</button>
+    </div>
+  </div>
 </dialog>
 
 <script>
   const dialog = document.querySelector<HTMLDialogElement>('[data-lightbox-dialog]');
-  const image = document.querySelector<HTMLImageElement>('[data-lightbox-image]');
+  const image = dialog?.querySelector<HTMLImageElement>('[data-lightbox-image]');
+  const caption = dialog?.querySelector<HTMLElement>('[data-lightbox-caption]');
+  const previous = dialog?.querySelector<HTMLButtonElement>('[data-lightbox-previous]');
+  const next = dialog?.querySelector<HTMLButtonElement>('[data-lightbox-next]');
+  let photos: HTMLAnchorElement[] = [];
+  let index = 0;
+  let opener: HTMLAnchorElement | undefined;
+
+  const show = (position: number) => {
+    if (!image || !caption || !photos.length) return;
+    index = (position + photos.length) % photos.length;
+    const link = photos[index];
+    image.src = link.href;
+    image.alt = link.querySelector('img')?.alt ?? 'Photo de New York Police Judiciaire';
+    caption.textContent = `${index + 1} / ${photos.length} — ${image.alt}`;
+    if (previous) previous.hidden = photos.length < 2;
+    if (next) next.hidden = photos.length < 2;
+  };
 
   document.addEventListener('click', (event) => {
     const target = event.target as HTMLElement | null;
     const link = target?.closest<HTMLAnchorElement>('[data-lightbox]');
     // Un clic modifié doit garder son sens : ouvrir dans un autre onglet.
-    if (!link || event.metaKey || event.ctrlKey || event.shiftKey || event.button !== 0) return;
+    if (!link || !dialog || !image || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) return;
 
     event.preventDefault();
-    if (!dialog || !image) return;
-    image.src = link.href;
-    image.alt = link.querySelector('img')?.alt ?? '';
+    // Chaque épisode, galerie et édition conserve sa propre série de photos.
+    const group = link.closest('.episode__images, .gallery, .visuals') ?? document;
+    photos = Array.from(group.querySelectorAll<HTMLAnchorElement>('[data-lightbox]'));
+    opener = link;
+    show(photos.indexOf(link));
     dialog.showModal();
     document.dispatchEvent(new Event('dialog:open'));
+  });
+
+  previous?.addEventListener('click', () => show(index - 1));
+  next?.addEventListener('click', () => show(index + 1));
+  dialog?.addEventListener('keydown', (event) => {
+    if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+      event.preventDefault();
+      show(index + (event.key === 'ArrowRight' ? 1 : -1));
+    }
   });
 
   const close = () => dialog?.close();
@@ -37,5 +72,6 @@
   dialog?.addEventListener('close', () => {
     if (image) image.removeAttribute('src');
     document.dispatchEvent(new Event('dialog:close'));
+    opener?.focus({ preventScroll: true });
   });
 </script>

@@ -15,9 +15,10 @@ interface Props {
   image?: ImageMetadata;
   /** Données structurées de la page, pour les moteurs de recherche. */
   schema?: unknown;
+  noindex?: boolean;
 }
 
-const { title, description, path = Astro.url.pathname, image, schema } = Astro.props;
+const { title, description, path = Astro.url.pathname, image, schema, noindex = false } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, Astro.site);
 
@@ -44,8 +45,10 @@ const year = new Date().getFullYear();
     <meta name="color-scheme" content="dark" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <link rel="canonical" href={canonical.href} />
-    {IS_PREVIEW && <meta name="robots" content="noindex, nofollow" />}
+    {!noindex && <link rel="canonical" href={canonical.href} />}
+    {(IS_PREVIEW || noindex) && <meta name="robots" content="noindex, nofollow" />}
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="theme-color" content="#0b0b0c" />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="fr_FR" />
     <meta property="og:site_name" content="Law&Order.shop" />
@@ -73,7 +76,10 @@ const year = new Date().getFullYear();
           New York Police Judiciaire
           <span>Law &amp; Order</span>
         </a>
-        <div class="site-header__actions">
+        <button class="site-menu-toggle" type="button" aria-expanded="false" aria-controls="site-menu" data-menu-toggle hidden>
+          Menu <span aria-hidden="true">☰</span>
+        </button>
+        <div class="site-header__actions" id="site-menu" data-menu-panel>
           <nav class="site-nav" aria-label="Navigation principale">
             {
               nav.map((item) => (
@@ -87,6 +93,10 @@ const year = new Date().getFullYear();
         </div>
       </div>
     </header>
+
+    <script>
+      import '../lib/navigation';
+    </script>
 
     <main id="contenu">
       <slot />

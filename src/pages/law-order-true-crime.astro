@@ -4,6 +4,7 @@ import { Image } from 'astro:assets';
 
 import packshot from '../assets/true-crime/packshot.webp';
 import Lightbox from '../components/Lightbox.astro';
+import EpisodeIndex from '../components/EpisodeIndex.astro';
 import Photo from '../components/Photo.astro';
 import Base from '../layouts/Base.astro';
 import trueCrime from '../data/true-crime.json';
@@ -45,7 +46,7 @@ const { edition } = trueCrime;
           src={packshot}
           alt="Coffret DVD de Law & Order True Crime, L’Affaire Menendez"
           widths={[360, 600, 900]}
-          sizes="(min-width: 52em) 32rem, 85vw"
+          sizes="(min-width: 52em) min(24rem, 38vw), min(24rem, calc(80vw - 2rem))"
           loading="eager"
         />
       </div>
@@ -86,10 +87,11 @@ const { edition } = trueCrime;
   <section class="page section">
     <p class="eyebrow">Guide des épisodes</p>
     <h2 class="section-title">Les huit épisodes</h2>
+    <EpisodeIndex episodes={trueCrime.episodes.map(e => ({ numero: e.numero, titre: typo(e.titreVf) }))} />
     <ol class="episodes stack--wide">
       {
         trueCrime.episodes.map((episode) => (
-          <li class="episode" data-reveal>
+          <li class="episode" id={`episode-${episode.numero}`} data-reveal>
             <p class="episode__number">Épisode {episode.numero}</p>
             <div>
               <h3 class="episode__title">{typo(episode.titreVf)}</h3>
@@ -98,6 +100,7 @@ const { edition } = trueCrime;
               </p>
               <p class="episode__resume">{typo(episode.resume)}</p>
               <p class="episode__cast">{episode.casting}</p>
+              <a class="episode__return" href="#sommaire-episodes">Retour au sommaire ↑</a>
             </div>
           </li>
         ))

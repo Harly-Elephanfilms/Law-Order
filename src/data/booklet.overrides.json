@@ -1,0 +1,22 @@
+{
+  "_comment": "S10E24 manque dans le PDF fourni. Métadonnées vérifiées pour afficher les nouvelles captures, sans inventer le texte du livret.",
+  "sources": {
+    "10.24": [
+      "https://www.telestar.fr/programme-tv/fiche-serie/75010749/new-york-police-judiciaire/S10",
+      "https://lawandorder.fandom.com/wiki/Vaya_Con_Dios",
+      "https://tv.apple.com/ca/episode/vaya-con-dios/umc.cmc.6t5hbtr8jhmu2cqwscfthcye6?l=fr&showId=umc.cmc.1s7b00ssapwlqujbumtpdcip8"
+    ]
+  },
+  "seasons": {
+    "10": [
+      {
+        "numero": 24,
+        "titre": "Un passé encombrant",
+        "titreVo": "Vaya Con Dios",
+        "diffusion": { "chaine": "NBC", "date": "24 mai 2000" },
+        "credits": ["Écrit par René Balcer & Richard Sweren", "Réalisé par Christopher Misiano"],
+        "notes": []
+      }
+    ]
+  }
+}

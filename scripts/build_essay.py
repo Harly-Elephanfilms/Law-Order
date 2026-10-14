@@ -32,18 +32,14 @@ from pathlib import Path
 
 from pypdf import PdfReader
 
-SOURCE = Path(
-    "/Users/harly/Desktop/LAW & ORDER VOL. 3/LIVRET/Livret_Law_S6a10-96p-hd.pdf"
-)
-SOURCE_ODT = Path(
-    "/Users/harly/Desktop/LAW & ORDER VOL. 3/Saisons 11 à 15 - Guide des épisodes.odt"
-)
+ROOT = Path(__file__).resolve().parent.parent
+SOURCE = ROOT.parent / "LIVRET/Livret_Law_S6a10-96p-hd.pdf"
+SOURCE_ODT = ROOT.parent / "Saisons 11 à 15 - Guide des épisodes.odt"
 # L'essai de l'ODT s'ouvre sur ce titre et s'achève au premier guide de saison.
 # Le document ponctue déjà à la française : le deux-points est précédé d'une
 # espace insécable, qu'il ne faut donc pas attendre dans le repère.
 DEBUT_ODT = "Entrées et sorties dans New York Police Judiciaire"
 FIN_ODT = re.compile(r"^Saison \d+ \(\d{4}")
-ROOT = Path(__file__).resolve().parent.parent
 DEST = ROOT / "src/data/essay.json"
 
 DEBUT = "INTRODUCTION"

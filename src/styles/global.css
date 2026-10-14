@@ -278,13 +278,19 @@ p:last-child {
 
 /* ---------- Grille des saisons ---------- */
 
-.season-grid {
+/* Mécanique de grille partagée avec .filmstrip__grid (accueil) ; chacune ne
+   garde en propre que sa largeur de colonne, son espacement et sa marge. */
+.season-grid,
+.filmstrip__grid {
   display: grid;
+  list-style: none;
+  padding: 0;
+}
+
+.season-grid {
   grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
   gap: var(--gap);
-  list-style: none;
   margin: 0;
-  padding: 0;
 }
 
 .season-card {
@@ -368,6 +374,11 @@ p:last-child {
   margin-top: 0.5rem;
 }
 
+.season-hero__art {
+  width: min(80%, 24rem);
+  justify-self: center;
+}
+
 .season-hero__art img {
   display: block;
   width: 100%;
@@ -389,7 +400,7 @@ p:last-child {
 .editions {
   display: grid;
   gap: var(--gap);
-  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
 }
 
 /* Une seule édition : la carte ne s'étire pas sur toute la largeur. */
@@ -556,6 +567,7 @@ p:last-child {
 
 .episode {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 0.5rem 2rem;
   padding-block: clamp(1.5rem, 3vw, 2.25rem);
   border-top: 1px solid var(--ink-line);
@@ -563,7 +575,7 @@ p:last-child {
 
 @media (min-width: 46em) {
   .episode {
-    grid-template-columns: 9rem 1fr;
+    grid-template-columns: 9rem minmax(0, 1fr);
   }
 }
 
@@ -857,20 +869,31 @@ html[data-motion='on'] .hero__scroll-cue-thumb {
   font-family: var(--serif);
   font-size: clamp(1.6rem, 3.6vw, 2.75rem);
   line-height: 1.35;
-  max-width: 22ch;
   color: var(--paper);
 }
 
+/* Citation et texte d'accompagnement forment une seule ligne éditoriale, côte
+   à côte, plutôt qu'un bloc empilé qui laisse la moitié de la page vide à
+   côté d'une citation par nature courte. */
+@media (min-width: 56em) {
+  .statement > .page {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: clamp(3rem, 6vw, 6rem);
+    align-items: center;
+  }
+}
+
 .statement__body {
-  display: grid;
-  gap: clamp(2rem, 6vw, 5rem);
-  margin-top: clamp(2.5rem, 6vw, 4rem);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: clamp(2rem, 6vw, 4rem);
 }
 
 @media (min-width: 56em) {
   .statement__body {
-    grid-template-columns: 1fr 1fr;
-    align-items: start;
+    margin-top: 0;
   }
 }
 
@@ -997,6 +1020,12 @@ html[data-motion='on'] .hero__scroll-cue-thumb {
   aspect-ratio: 16 / 9;
   object-fit: cover;
   border: 1px solid var(--ink-line);
+}
+
+@media (max-width: 45.99em) {
+  .episode__images {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 /* ---------- Visuels d'une édition ---------- */
@@ -1164,45 +1193,35 @@ html[data-motion='on'] .hero__scroll-cue-thumb {
   background: var(--brass);
 }
 
-/* ---------- Galerie horizontale des saisons (accueil) ---------- */
-/* Rangée déroulante native par défaut — accessible au clavier et au tactile
-   sans une ligne de JavaScript. Sur grand écran, avec le mouvement autorisé,
-   src/lib/motionEngine.ts l'épingle et la fait défiler à l'horizontale au
-   scroll ; la classe .filmstrip--cinematic n'est alors posée qu'une fois
-   l'épinglage effectivement en place. */
+/* ---------- Galerie des saisons (accueil) ---------- */
+/* Une grille qui s'enroule sur autant de lignes que nécessaire — le même
+   balisage, quel que soit le mouvement autorisé. src/lib/motionEngine.ts ne
+   fait qu'y ajouter une entrée en fondu et, sur grand écran avec un pointeur
+   fin, la distorsion au survol (src/lib/hoverDistort.ts). */
 
 .filmstrip {
   position: relative;
 }
 
-.filmstrip__viewport {
-  width: 100%;
-  overflow-x: auto;
-  overflow-y: hidden;
-  overscroll-behavior-x: contain;
-  scroll-snap-type: x proximity;
-  scrollbar-color: var(--ink-line) transparent;
+.filmstrip__grid {
+  grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+  margin: clamp(2.5rem, 6vw, 4rem) 0 0;
 }
 
-.filmstrip--cinematic .filmstrip__viewport {
-  overflow: hidden;
-  scroll-snap-type: none;
-}
-
-.filmstrip__track {
-  display: flex;
-  align-items: flex-start;
-  gap: clamp(1.1rem, 2.5vw, 1.75rem);
-  width: max-content;
-  padding: 0.5rem max(1.25rem, calc((100vw - var(--page)) / 2)) 2.5rem;
+/* Sous 40em, deux colonnes de 11rem plus l'espacement dépassent la largeur
+   disponible : la grille ne tient plus qu'une colonne, sur un téléphone
+   ordinaire, quinze cartes empilées en plein écran font défiler l'essentiel
+   de la page d'accueil. */
+@media (max-width: 39.99em) {
+  .filmstrip__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 .filmstrip__card {
-  flex: 0 0 auto;
   display: grid;
   gap: 0.85rem;
-  width: clamp(11.5rem, 21vw, 15.5rem);
-  scroll-snap-align: start;
   text-decoration: none;
 }
 
@@ -1255,12 +1274,13 @@ html[data-motion='on'] .hero__scroll-cue-thumb {
 }
 
 .filmstrip__end {
-  margin-top: 1.75rem;
+  margin-top: clamp(2.5rem, 6vw, 4rem);
 }
 
 /* ---------- Cartes intégrales — teinte acier ---------- */
 
 .integrale {
+  scroll-margin-top: 6rem;
   background: linear-gradient(155deg, var(--steel) 0%, var(--ink-raised) 65%);
 }
 
@@ -1308,3 +1328,56 @@ html[data-motion='on'] .hero__scroll-cue-thumb {
   font-size: 0.85rem;
   color: var(--paper-dim);
 }
+
+/* Navigation compacte, sommaires et visionneuse. */
+[hidden] { display: none !important; }
+main [id] { scroll-margin-top: calc(var(--header-height, 4.5rem) + 1.5rem); }
+.site-menu-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 2.75rem;
+  padding: 0.4rem 0.8rem;
+  color: var(--paper);
+  border: 1px solid var(--ink-line);
+  background: none;
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+@media (max-width: 63.99em) {
+  .site-header__inner { flex-wrap: wrap; flex-direction: row; align-items: center; gap: 0.5rem; padding-block: 0.55rem; }
+  .wordmark { flex: 1; min-width: 0; font-size: clamp(0.64rem, 2.6vw, 0.85rem); }
+  .site-header__actions { flex-basis: 100%; padding-block: 0.75rem; gap: 1rem; }
+  .site-nav { width: 100%; gap: 0.25rem; flex-direction: column; }
+  .site-nav a { padding: 0.6rem; min-height: 2.75rem; }
+}
+.hero__offer { max-width: 45ch; margin-top: 1rem; color: var(--paper); font-size: 1rem; }
+@media (max-width: 63.99em) {
+  .hero { min-height: calc(100svh - var(--header-height, 4rem)); padding-block: 3.5rem 4.5rem; }
+  .hero .hero-title { font-size: clamp(1.85rem, 7vw, 3rem); }
+  .hero .eyebrow { font-size: 0.65rem; flex-wrap: wrap; }
+  .hero__actions { gap: 1rem; }
+  .hero__actions a { min-height: 2.75rem; display: inline-flex; align-items: center; }
+  .hero__scroll-cue { display: none; }
+}
+.season-shortcuts { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; padding-block: 0.85rem; border-block: 1px solid var(--ink-line); }
+.season-shortcuts a { min-height: 2.75rem; display: inline-flex; align-items: center; text-decoration: none; font-size: 0.9rem; color: var(--paper-dim); }
+.season-shortcuts a:hover { color: var(--brass-bright); }
+.episode-index { border: 1px solid var(--ink-line); background: var(--ink-raised); }
+.episode-index summary { cursor: pointer; padding: 1rem; font-family: var(--serif); font-size: 1.15rem; }
+.episode-index summary > span { margin-left: 0.75rem; font-family: var(--sans); font-size: 0.8rem; color: var(--paper-dim); }
+.episode-index__list { list-style: none; padding: 0 1rem 1rem; margin: 0; display: grid; gap: 0.3rem 1.5rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr)); }
+.episode-index__list a { display: flex; align-items: baseline; gap: 0.8rem; padding-block: 0.6rem; min-height: 2.75rem; text-decoration: none; font-size: 0.9rem; border-top: 1px solid var(--ink-line); }
+.episode-index__list a:hover { color: var(--brass-bright); }
+.episode-index__list span { color: var(--brass); font-variant-numeric: tabular-nums; }
+.episode__return { display: inline-block; margin-top: 1.2rem; font-size: 0.75rem; color: var(--paper-dim); text-underline-offset: 0.2rem; padding-block: 0.35rem; }
+.episode__source { font-size: 0.75rem; color: var(--paper-dim); margin-top: 0.5rem; }
+.lightbox { max-height: 94svh; overflow: auto; background: var(--ink); }
+.lightbox__frame { position: relative; padding-top: 3rem; }
+.lightbox__close { position: absolute; top: 0.1rem; right: 0.25rem; }
+.lightbox__image { max-height: calc(94svh - 9rem); }
+.lightbox__toolbar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0.75rem; }
+.lightbox__caption { flex: 1; text-align: center; color: var(--paper-dim); font-size: 0.85rem; margin: 0; }
+.lightbox__step { flex-shrink: 0; min-width: 2.75rem; min-height: 2.75rem; font-size: 1.4rem; border: 1px solid var(--ink-line); background: none; color: var(--paper); cursor: pointer; }
+.lightbox__step:hover { border-color: var(--brass); }

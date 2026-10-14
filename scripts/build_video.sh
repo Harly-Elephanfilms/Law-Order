@@ -10,7 +10,7 @@
 # et l'image d'attente affichée avant toute lecture.
 set -euo pipefail
 
-SOURCE="/Users/harly/Desktop/LAW & ORDER VOL. 3"
+SOURCE="$(cd "$(dirname "$0")/../.." && pwd)"
 OUT="$(cd "$(dirname "$0")/.." && pwd)/public/media"
 TEASER="$SOURCE/TEASER/TEASER_L&O_29s_DEF.mp4"
 TRAILER="$SOURCE/BANDE ANNONCE/BA_LawAndOrder_S1_25_COURTE_DEF.mp4"

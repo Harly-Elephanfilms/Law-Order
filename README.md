@@ -1,10 +1,10 @@
 # lawandorder.shop
 
 Site vitrine des intégrales *New York Police Judiciaire* (Law & Order) éditées par
-Elephant Films. Site statique Astro : 21 pages, aucune base de données, aucun back-office.
+Elephant Films. Site statique Astro : 21 pages de contenu et une page 404, aucune base de données, aucun back-office.
 
 Les fiches des quinze saisons ne sont pas saisies à la main : elles sont **générées** à
-partir des dossiers de production (`~/Desktop/LAW & ORDER VOL. 3`), qui font foi.
+partir des dossiers de production placés à côté de `site/`, qui font foi.
 
 ## Mettre à jour le site
 
@@ -12,15 +12,32 @@ partir des dossiers de production (`~/Desktop/LAW & ORDER VOL. 3`), qui font foi
 npm install
 npm run data           # relit les dossiers sources → src/data/seasons.json
 npm run episodes       # guide des épisodes 11 à 15 (.odt) → src/data/episodes.json
+npm run episodes:first # guide des épisodes 1 à 5 (.doc) → src/data/early-episodes.json
 npm run booklet        # guide des épisodes 6 à 10 (livret PDF) → src/data/booklet.json
 npm run essay          # textes de fond du livret et du guide → src/data/essay.json
 npm run images         # packshots et photos → src/assets/generated/
+npm run images:png     # convertit les .tif/.tiff/.till de S5 à S10 en PNG, originaux conservés
+npm run images:update  # actualise S5 à S10 en conservant les autres masters déjà préparés
+npm run images:update-first # actualise S1 à S4 et le coffret intégrale 11 à 15
 npm run video          # teaser et bande-annonce → public/media/  (ffmpeg requis)
 npm run build          # → dist/  (site public)
+npm run build:release  # build public + contrôle des liens, images, anciennes URL et indexation
 npm run build:preview  # → dist/  (sous-domaine de test : noindex + robots Disallow)
 ```
 
 `npm run dev` sert le site en local sur http://localhost:4321.
+
+La procédure de bascule et les vérifications du domaine réel figurent dans
+[`LANCEMENT.md`](LANCEMENT.md). Les fiches de saison et True Crime offrent un sommaire
+des épisodes. La visionneuse parcourt les images d’un épisode, d’une édition ou d’une
+galerie avec les boutons et les flèches du clavier. Sur mobile, le menu se replie et
+l’accueil utilise le poster ; le moteur GSAP et la vidéo de fond ne sont pas téléchargés.
+Le menu et les liens restent accessibles sans JavaScript.
+
+`src/data/episode-supplements.json` complète les 32 résumés absents des guides, sans
+modifier leurs textes existants. Chaque complément est adapté en français de TVmaze,
+vérifié contre le numéro et le titre original, crédité et publié sous CC BY-SA 4.0.
+`/resumes-complementaires.json` expose uniquement ces compléments avec leurs sources.
 
 ## D'où viennent les données
 
@@ -29,24 +46,50 @@ npm run build:preview  # → dist/  (sous-domaine de test : noindex + robots Dis
 | Fiches FIP (`*.xlsx`) | résumé, accroche, bonus, caractéristiques techniques, EAN |
 | Jaquettes (`*JaqDVD*.pdf`, `*JaqBD*.pdf`) | mêmes champs, pour les éditions sans FIP |
 | `Saisons 11 à 15 - Guide des épisodes.odt` | les 120 épisodes des saisons 11 à 15 et la distribution |
+| `Saisons 1 à 5 - Guide des épisodes.doc` | les 111 épisodes des saisons 1 à 5 et la distribution ; résumés et acteurs invités non renseignés pour S4E15–22 et S5 |
 | `LIVRET/Livret_Law_S6a10-96p-hd.pdf` | les 115 épisodes des saisons 6 à 10, le générique de chacune, et les textes de fond de la page « La série » |
 | `PACKSHOTS 3D/`, `PHOTOS/`, `PNG/` | visuels des coffrets et photos de production |
 | `VISUELS 2D/`, `2D/` (`*-Dos.jpg`) | dos de jaquette : accroche, résumé, caractéristiques, code-barres |
 | `TEASER/`, `BANDE ANNONCE/` | vidéos du bandeau d'accueil |
 | Page catégorie Elephant Films | liens d'achat DVD et Blu-ray |
 
-Une photo n'illustre un épisode que si son nom le désigne : `Ep18_WHITELIE_…png`.
-C'est le seul lien fiable entre une image et un épisode — les codes de production
-(`E1304`) ne suivent pas l'ordre de diffusion et ne sont pas interprétés. Déposer des
-fichiers ainsi nommés dans le `PHOTOS/` d'une saison suffit à illustrer son guide :
-`npm run images` les reprend, deux par épisode.
+Les images viennent des dossiers `PHOTOS/` et `PNG/` de chaque saison. `npm run images`
+actualise leur inventaire et retrouve les boîtiers et dos renommés, sans réécrire les
+textes ni les caractéristiques techniques.
+
+Une photo est rattachée à son épisode par son nom (`Ep18_WHITELIE_…png`,
+`@Ep2-Law3.jpg`) ou par un code de production **vérifié** dans
+`src/data/episode-image-mapping.json`. Les codes ne suivent pas l'ordre de diffusion :
+`E5302` désigne S15E06, et non S15E02. La table corrige aussi les préfixes inversés
+des captures S13E23/S13E24. Toute autre contradiction interrompt l'import.
+
+Deux images distinctes sont retenues par épisode ; les doublons `PHOTOS/PNG` ne
+consomment pas les deux places. Les images sans correspondance restent dans la
+galerie de saison, sans numéro d'épisode inventé. Les captures de *New York Cour de
+justice* présentes dans S15 sont exclues des images de *Police judiciaire*.
+Le manifeste `images.json` conserve les chemins sources de chaque sélection ;
+`image-import-report.json` liste les épisodes sans image, les fichiers non attribués
+et les images illisibles (notamment les fichiers vides), exclues avant la sélection.
+Les nouveaux masters sont préparés dans un dossier temporaire avant de remplacer
+la génération précédente.
+`npm run test:images` vérifie les correspondances et les cas ambigus.
+
+La conversion PNG conserve la résolution et vérifie l'égalité des pixels décodés.
+Pour convertir d'autres saisons : `npm run images:png -- 11 12`.
+Une actualisation ciblée permet de travailler quand les autres dossiers sources ont
+été archivés : les scripts d'inventaire et de préparation acceptent tous deux
+`--seasons=5,6,7,8,9,10`. L'import complet `npm run images` demande toutes les sources.
+Le script de préparation accepte aussi `--integrales=11-15` pour ajouter ou actualiser
+ce coffret dans le même import ciblé. Les intégrales sont affichées dès que leurs
+visuels sont préparés ; les boutons de commande apparaissent lorsque les liens
+produit vérifiés sont renseignés dans `shop-links.json`.
 
 Chaque édition, DVD comme Blu-ray, expose son boîtier 3D — et sur les fiches saison le dos
 de sa jaquette, l'un et l'autre agrandissables (`src/components/EditionVisuals.astro`). Les
 cartes d'intégrale de l'accueil s'en tiennent au boîtier (`montrerDos={false}`) : à cette
 taille le dos ne se lit pas et alourdit la carte.
 
-Les visuels des deux coffrets intégrales ne se déduisent d'aucune saison : leurs chemins
+Les visuels des trois coffrets intégrales ne se déduisent d'aucune saison : leurs chemins
 sont nommés un par un en tête de `build_images.mjs` (constante `INTEGRALES`). On y retient
 le boîtier seul, pas la composition avec les saisons dépliées — celle de l'intégrale 1 à 5
 porte un macaron « Exclusivité Fnac ».
@@ -74,10 +117,17 @@ d'interligne dans un paragraphe, davantage à chaque rupture — pour rétablir 
 intertitres. Les fragments en italique sont des blocs de texte distincts : leurs espaces
 doivent être préservées, sans quoi « la série » et le titre d'œuvre qui suit se soudent.
 
-Le guide des épisodes couvre les saisons 6 à 15, de deux sources distinctes que
-`src/lib/seasons.ts` réunit. Le livret compte 22 fiches pour la saison 9 et 23 pour la
-saison 10, là où les coffrets annoncent 24 épisodes : ses épisodes en deux parties sont
-traités en une seule fiche.
+Le guide des épisodes couvre les saisons 1 à 15, de trois sources distinctes que
+`src/lib/seasons.ts` réunit. `build_early_episodes.py` extrait le `.doc` avec
+`textutil` sur macOS ; ailleurs, `--text chemin.txt` accepte une extraction UTF-8.
+Les deux parties de « La loi du silence / L’empire du crime » ont chacune leur
+titre et leur date de diffusion ; résumé et distribution communs sont signalés.
+Les champs vides de S4E15–22 et S5 restent absents, et la remarque de S5E19 reste une note.
+`npm run test:episodes-first` vérifie ces cas et le rejet des imports incomplets.
+Les deux parties de « Mafia russe », réunies dans le
+livret de S9, sont extraites séparément pour recevoir leurs propres images.
+S10E24 est absent du PDF fourni : ses métadonnées vérifiées sont complétées dans
+`src/data/booklet.overrides.json`, avec leurs sources, pour afficher ses captures.
 
 Un seul cas à ce jour : la FIP Blu-ray de la saison 6 annonce 24 épisodes et 24 × 48 min,
 là où les deux jaquettes imprimées et la fiche produit Elephant Films (1104 min) donnent
@@ -114,21 +164,17 @@ motionEngine.ts — aucun ne dépend d'un composant Astro dédié :
 | `data-reveal-group` (sur un ancêtre) | les `data-reveal` qu'il contient se révèlent en cascade |
 | `data-parallax="18"` | décalage vertical (en % de l'élément) sur sa traversée du viewport |
 
-**La galerie horizontale des saisons** (`src/components/SeasonFilmstrip.astro`) est le
-même balisage — une rangée de vraies vignettes, chacune un vrai lien — quel que soit le
-mouvement autorisé : `overflow-x:auto` et `scroll-snap` natifs par défaut (tactile et
-clavier compris), transformée en galerie épinglée qui défile à l'horizontale seulement sur
-grand écran avec mouvement permis. Les vignettes gagnent alors une légère distorsion au
+**La galerie des saisons** (`src/components/SeasonFilmstrip.astro`) est une grille qui
+s'enroule sur autant de lignes que nécessaire — le même balisage, quel que soit le
+mouvement autorisé, sans défilement séparé à réapprendre ni vignette coupée en bord de
+cadre. Sur grand écran avec un pointeur fin, les vignettes gagnent une légère distorsion au
 survol (`src/lib/hoverDistort.ts`) : un unique contexte WebGL Three.js, déplacé d'une
 vignette à l'autre plutôt que multiplié par quinze, chargé à la demande au premier survol
-(jamais pour les écrans tactiles ni en mouvement réduit). Le focus clavier sur une vignette
-hors champ ramène la galerie à sa position, exactement comme le ferait le défilement natif
-que la version épinglée remplace.
+(jamais pour les écrans tactiles ni en mouvement réduit).
 
 Le bandeau d'accueil s'épingle brièvement pendant un zoom lent du fond, plafonné pour ne
 jamais devenir un noir uni (la section suivante, elle aussi sombre, enchaînerait sans
-transition perceptible) ; ce bref épinglage, comme celui de la galerie, est lui aussi
-réservé au grand écran.
+transition perceptible) ; cet épinglage est réservé au grand écran.
 
 ## Ajouter une saison
 
@@ -150,6 +196,7 @@ sans autre intervention. Il faut cependant étendre `range(1, 16)` dans
 | --- | --- |
 | `scripts/build_data.py` | inventorie les sources, lit FIP et jaquettes, écrit `seasons.json` |
 | `scripts/build_episodes.py` | extrait le guide des saisons 11 à 15 du `.odt`, écrit `episodes.json` |
+| `scripts/build_early_episodes.py` | extrait le guide des saisons 1 à 5 du `.doc`, écrit `early-episodes.json` |
 | `scripts/build_booklet.py` | extrait le guide des saisons 6 à 10 du livret, écrit `booklet.json` |
 | `scripts/build_essay.py` | extrait les textes de fond des deux documents, écrit `essay.json` |
 | `scripts/fetch_shop_links.py` | relève les liens d'achat, écrit `shop-links.json` |

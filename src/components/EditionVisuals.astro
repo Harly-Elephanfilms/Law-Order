@@ -19,17 +19,18 @@ interface Props {
 }
 
 const { edition, contexte, montrerDos = true } = Astro.props;
+const complement = contexte.startsWith('intégrale') ? `de l’${contexte}` : `de la ${contexte}`;
 
 const visuels = [
   edition.packshot && {
     src: edition.packshot,
-    alt: `Coffret ${edition.label} de la ${contexte}`,
+    alt: `Coffret ${edition.label} ${complement}`,
     classe: undefined,
   },
   montrerDos &&
     edition.dos && {
       src: edition.dos,
-      alt: `Dos de la jaquette ${edition.label} de la ${contexte}`,
+      alt: `Dos de la jaquette ${edition.label} ${complement}`,
       classe: 'visuals__dos',
     },
 ].filter((v) => Boolean(v)) as { src: ImageMetadata; alt: string; classe?: string }[];

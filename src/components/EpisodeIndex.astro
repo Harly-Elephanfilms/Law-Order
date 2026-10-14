@@ -1,0 +1,12 @@
+---
+interface Props { episodes: { numero: number; titre: string }[] }
+const { episodes } = Astro.props;
+---
+<details class="episode-index stack" id="sommaire-episodes">
+  <summary>Choisir un épisode <span>{episodes.length} épisodes</span></summary>
+  <ol class="episode-index__list">
+    {episodes.map((episode) => (
+      <li><a href={`#episode-${episode.numero}`}><span>{String(episode.numero).padStart(2, '0')}</span>{episode.titre}</a></li>
+    ))}
+  </ol>
+</details>

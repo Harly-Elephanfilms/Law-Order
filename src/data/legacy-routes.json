@@ -1,0 +1,18 @@
+{
+  "checkedAt": "2026-10-14",
+  "source": "https://lawandorder.shop/wp-json/wp/v2/pages?per_page=100&_fields=link,slug,status",
+  "paths": [
+    "/",
+    "/law-order-true-crime/",
+    "/mention-legale/",
+    "/toutes-les-saisons/",
+    "/toutes-les-saisons/saison-1/",
+    "/toutes-les-saisons/saison-2/",
+    "/toutes-les-saisons/saison-3/",
+    "/toutes-les-saisons/saison-4/",
+    "/toutes-les-saisons/saison-5/",
+    "/toutes-les-saisons/saison-6/",
+    "/toutes-les-saisons/saison-7/",
+    "/toutes-les-saisons/saison-8/"
+  ]
+}

@@ -43,7 +43,6 @@ function initSmoothScroll(): void {
 
   // Ancre interne : un en-tête collant ne doit jamais recouvrir la cible.
   const header = document.querySelector<HTMLElement>('.site-header');
-  const offset = -(header?.offsetHeight ?? 0) - 24;
   document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]').forEach((link) => {
     const id = link.getAttribute('href');
     if (!id || id === '#') return;
@@ -51,7 +50,19 @@ function initSmoothScroll(): void {
       const target = document.querySelector<HTMLElement>(id);
       if (!target) return;
       event.preventDefault();
-      lenis?.scrollTo(target, { offset, duration: 1.1 });
+      if (target instanceof HTMLDetailsElement) target.open = true;
+      history.pushState(null, '', id);
+      lenis?.scrollTo(target, {
+        offset: -(header?.offsetHeight ?? 0) - 24,
+        duration: 1.1,
+        onComplete: () => {
+          const focus = target instanceof HTMLDetailsElement ? target.querySelector('summary') : target;
+          if (focus instanceof HTMLElement) {
+            if (!focus.hasAttribute('tabindex') && focus.tagName !== 'SUMMARY') focus.tabIndex = -1;
+            focus.focus({ preventScroll: true });
+          }
+        },
+      });
     });
   });
 }
@@ -212,17 +223,15 @@ function initStatement(): void {
   });
 }
 
-/* ---------- Galerie horizontale des saisons ---------- */
-/* Par défaut : une rangée qui défile nativement, tactile et clavier compris —
-   voir .filmstrip__viewport dans global.css. Sur grand écran, avec un
-   pointeur fin, elle s'épingle et défile à l'horizontale avec le scroll de la
-   page ; les vignettes gagnent alors une légère distorsion au survol. */
+/* ---------- Galerie des saisons ---------- */
+/* Une grille qui s'enroule nativement — aucun épinglage, aucun défilement à
+   réapprendre. Seuls s'ajoutent une entrée en fondu et, sur grand écran avec
+   un pointeur fin, une légère distorsion au survol des vignettes. */
 
 function initFilmstrip(): void {
   const section = document.querySelector<HTMLElement>('[data-filmstrip]');
-  const viewport = section?.querySelector<HTMLElement>('[data-filmstrip-viewport]');
   const track = section?.querySelector<HTMLElement>('[data-filmstrip-track]');
-  if (!section || !viewport || !track) return;
+  if (!section || !track) return;
 
   const cards = Array.from(track.querySelectorAll<HTMLElement>('[data-filmstrip-card]'));
 
@@ -235,58 +244,14 @@ function initFilmstrip(): void {
       gsap.to(cards, { autoAlpha: 1, y: 0, duration: 0.8, stagger: 0.06, ease: 'power3.out' }),
   });
 
-  if (!window.matchMedia(WIDE_SCREEN).matches) return; // sous 64em : rien de plus.
-
-  section.classList.add('filmstrip--cinematic');
-  const distance = () => Math.max(0, track.scrollWidth - viewport.clientWidth);
-
-  const tween = gsap.to(track, {
-    x: () => -distance(),
-    ease: 'none',
-    scrollTrigger: {
-      trigger: section,
-      start: 'top top',
-      end: () => `+=${distance()}`,
-      pin: viewport,
-      scrub: 0.6,
-      anticipatePin: 1,
-      invalidateOnRefresh: true,
-    },
-  });
-
-  // Le focus clavier doit rester visible : une vignette hors champ, déplacée
-  // par transformation plutôt que par un vrai défilement, ne se ramène pas
-  // seule dans le cadre comme le ferait un navigateur sur un conteneur natif.
-  cards.forEach((card) => {
-    card.addEventListener('focus', () => {
-      const trigger = tween.scrollTrigger;
-      if (!trigger) return;
-      const total = distance();
-      if (total <= 0) return;
-
-      const currentX = -(gsap.getProperty(track, 'x') as number);
-      const left = card.offsetLeft;
-      const right = left + card.offsetWidth;
-      const viewportWidth = viewport.clientWidth;
-
-      let targetX = currentX;
-      if (left < currentX) targetX = left - 24;
-      else if (right > currentX + viewportWidth) targetX = right - viewportWidth + 24;
-      targetX = gsap.utils.clamp(0, total, targetX);
-
-      const progress = targetX / total;
-      const y = trigger.start + (trigger.end - trigger.start) * progress;
-      lenis?.scrollTo(y, { duration: 0.6 });
-    });
-  });
-
-  if (window.matchMedia(FINE_POINTER).matches && 'WebGLRenderingContext' in window) {
-    import('./hoverDistort')
-      .then(({ attachHoverDistort }) => attachHoverDistort(cards))
-      .catch(() => {
-        // Sans WebGL utilisable, les vignettes restent de simples images :
-        // rien à faire, rien à signaler.
-      });
+  if (window.matchMedia(WIDE_SCREEN).matches && window.matchMedia(FINE_POINTER).matches && 'WebGLRenderingContext' in window) {
+    section.addEventListener('pointerover', () => {
+      import('./hoverDistort')
+        .then(({ attachHoverDistort }) => attachHoverDistort(cards))
+        .catch(() => {
+          // Les images ordinaires restent utilisables si WebGL est indisponible.
+        });
+    }, { once: true });
   }
 }
 
@@ -300,5 +265,13 @@ export function initEngine(): void {
   initStatement();
   initFilmstrip();
 
-  window.addEventListener('load', () => ScrollTrigger.refresh());
+  const refresh = () => {
+    ScrollTrigger.refresh();
+    const id = window.location.hash;
+    if (!id) return;
+    const target = document.getElementById(decodeURIComponent(id.slice(1)));
+    if (target) lenis?.scrollTo(target, { immediate: true, offset: -(document.querySelector<HTMLElement>('.site-header')?.offsetHeight ?? 0) - 24 });
+  };
+  if (document.readyState === 'complete') refresh();
+  else window.addEventListener('load', refresh, { once: true });
 }

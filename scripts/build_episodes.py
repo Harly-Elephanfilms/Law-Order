@@ -20,8 +20,8 @@ import sys
 import zipfile
 from pathlib import Path
 
-SOURCE = Path("/Users/harly/Desktop/LAW & ORDER VOL. 3/Saisons 11 à 15 - Guide des épisodes.odt")
 ROOT = Path(__file__).resolve().parent.parent
+SOURCE = ROOT.parent / "Saisons 11 à 15 - Guide des épisodes.odt"
 DEST = ROOT / "src/data/episodes.json"
 
 CREDIT_PREFIXES = ("Ecrit par", "Écrit par", "Adapté par", "Histoire de", "Scénario de", "Réalisé par")
@@ -57,7 +57,15 @@ def parse_episode(block):
         "notes": [],
     }
 
+    crossover = False
     for line in block[1:]:
+        # Le guide ajoute le crossover après S15E20. Ses métadonnées doivent
+        # rester dans les notes, sans remplacer celles de Tombstone.
+        if line.startswith("NEW YORK COUR DE JUSTICE Episode"):
+            crossover = True
+        if crossover:
+            episode["notes"].append(line)
+            continue
         if line.startswith("Titre original"):
             episode["titreVo"] = line.split(":", 1)[1].strip()
         elif re.match(r"^[A-Z]{2,4}, ", line):  # « NBC, 21 novembre 2001 »
@@ -86,6 +94,8 @@ def parse_season(block):
         for line in block[1 : starts[0]]:
             if line == "Starring":
                 continue
+            if line.startswith(("Producteur", "Co-producteur", "Créateur", "Créé par", "Musique")):
+                break  # Les parenthèses de crédits techniques ne sont pas des rôles.
             if match := STARRING.match(line):
                 name, role = match.groups()
                 starring.append({"acteur": name.strip(), "role": role.strip()})
@@ -112,6 +122,10 @@ def main():
     ]
 
     data = {str(s["number"]): {"starring": s["starring"], "episodes": s["episodes"]} for s in seasons}
+    # Coquille présente dans le document de travail, conservé intact.
+    for episode in data.get("14", {}).get("episodes", []):
+        if episode["numero"] == 12 and episode.get("resume"):
+            episode["resume"] = episode["resume"].replace("priso, Mayor of Kingstownn", "prison")
     DEST.parent.mkdir(parents=True, exist_ok=True)
     DEST.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf8")
 

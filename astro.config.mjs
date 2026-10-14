@@ -9,5 +9,5 @@ export default defineConfig({
   trailingSlash: 'always',
   build: { format: 'directory' },
   image: { responsiveStyles: true },
-  integrations: [sitemap()],
+  integrations: [sitemap({ filter: (page) => !page.endsWith('/404/') && !page.endsWith('/404') })],
 });

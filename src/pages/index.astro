@@ -39,13 +39,13 @@ const vignette = integrales[0]?.editions[0]?.packshot;
 
   <SeasonFilmstrip seasons={seasons} />
 
-  <section class="page section">
+  <section class="page section" id="integrales">
     <p class="eyebrow" data-reveal>Les intégrales</p>
     <h2 class="section-title" data-reveal>Cinq saisons dans un seul coffret</h2>
     <div class="editions stack" data-reveal-group>
       {
         integrales.map((integrale) => (
-          <article class="edition integrale" data-reveal>
+          <article class="edition integrale" id={`integrale-${integrale.range}`} data-reveal>
             <h3>{typo(integrale.label)}</h3>
             <p>
               L’ensemble des cinq saisons réunies, dans la même édition restaurée que les coffrets

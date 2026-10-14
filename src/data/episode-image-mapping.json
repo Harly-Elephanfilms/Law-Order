@@ -1,0 +1,30 @@
+{
+  "_comment": "Codes vérifiés, dans l'ordre de diffusion. Les numéros TV_LANxx_000xx sont des identifiants de photo et ne désignent pas un épisode.",
+  "seasons": {
+    "1": {
+      "source": "https://lawandorder.fandom.com/wiki/By_Hooker%2C_By_Crook",
+      "codes": { "66203": 7 }
+    },
+    "11": {
+      "source": "https://lawandorder.fandom.com/wiki/L%26O_Season_11",
+      "orderedCodes": ["E1304", "E1303", "E1307", "E1308", "E1309", "E1306", "E1302", "E1310", "E1311", "E1318", "E1301", "E1315", "E1313", "E1322", "E1319", "E1316", "E1324", "E1312", "E1323", "E1326", "E1325", "E1329", "E1327", "E1331"]
+    },
+    "12": {
+      "source": "https://lawandorder.fandom.com/wiki/L%26O_Season_12",
+      "orderedCodes": ["E2208", "E2210", "E2207", "E2206", "E2202", "E2201", "E2209", "E2205", "E2203", "E2213", "E2214", "E2220", "E2216", "E2212", "E2215", "E2204", "E2227", "E2221", "E2218", "E2224", "E2222", "E2225", "E2217", "E2226"]
+    },
+    "13": {
+      "source": "https://lawandorder.fandom.com/wiki/L%26O_Season_13",
+      "orderedCodes": ["E3304", "E3301", "E3305", "E3303", "E3309", "E3302", "E3306", "E3308", "E3307", "E3311", "E3310", "E3313", "E3314", "E3315", "E3320", "E3312", "E3318", "E3319", "E3316", "E3325", "E3323", "E3324", "E3317", "E3322"],
+      "filenameEpisodeOverrides": { "E3317": 24, "E3322": 23 }
+    },
+    "14": {
+      "source": "https://lawandorder.fandom.com/wiki/L%26O_Season_14",
+      "orderedCodes": ["E4302", "E4304", "E4301", "E4305", "E4309", "E4311", "E4307", "E4303", "E4308", "E4306", "E4313", "E4310", "E4315", "E4318", "E4314", "E4320", "E4316", "E4326", "E4324", "E4327", "E4317", "E4325", "E4321", "E4319"]
+    },
+    "15": {
+      "source": "https://lawandorder.fandom.com/wiki/L%26O_Season_15",
+      "orderedCodes": ["E5301", "E5307", "E5304", "E5308", "E5306", "E5302", "E5313", "E5312", "E5303", "E5314", "E5311", "E5316", "E5315", "E5318", "E5319", "E5321", "E5322", "E5317", "E5324", "E5325", "E5328", "E5323", "E5326", "E5329"]
+    }
+  }
+}

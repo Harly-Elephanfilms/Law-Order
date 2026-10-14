@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 
 import EditionVisuals from '../../components/EditionVisuals.astro';
+import EpisodeIndex from '../../components/EpisodeIndex.astro';
 import Lightbox from '../../components/Lightbox.astro';
 import Photo from '../../components/Photo.astro';
 import Base from '../../layouts/Base.astro';
@@ -49,6 +50,10 @@ const description = season.resume
           {season.years}{season.episodeCount && ` · ${season.episodeCount} épisodes`}
         </p>
         {season.resume && <p class="stack">{season.resume}</p>}
+        <div class="actions stack">
+          <a class="button button--solid" href="#coffrets">Voir les coffrets DVD et Blu-ray</a>
+          <a class="button" href="#episodes">Consulter les épisodes</a>
+        </div>
       </div>
       {
         cover && (
@@ -57,7 +62,7 @@ const description = season.resume
               src={cover}
               alt={`Coffret de la saison ${season.number} de New York Police Judiciaire`}
               widths={[360, 600, 900]}
-              sizes="(min-width: 52em) 32rem, 85vw"
+              sizes="(min-width: 52em) min(24rem, 38vw), min(24rem, calc(80vw - 2rem))"
               loading="eager"
             />
           </div>
@@ -65,6 +70,13 @@ const description = season.resume
       }
     </section>
   </div>
+
+  <nav class="page season-shortcuts" aria-label="Dans cette saison">
+    <a href="#coffrets">Coffrets</a>
+    {season.starring.length > 0 && <a href="#distribution">Distribution</a>}
+    {season.episodes.length > 0 && <a href="#episodes">Épisodes</a>}
+    {season.photos.length > 0 && <a href="#photos">Photos</a>}
+  </nav>
 
   {
     season.accrocheSecondaire && (
@@ -77,7 +89,7 @@ const description = season.resume
     )
   }
 
-  <section class="page section">
+  <section class="page section" id="coffrets">
     <p class="eyebrow">Les éditions</p>
     <h2 class="section-title">Coffrets disponibles</h2>
     <div class="editions stack--wide" data-reveal-group>
@@ -134,7 +146,7 @@ const description = season.resume
 
   {
     season.starring.length > 0 && (
-      <section class="page section">
+      <section class="page section" id="distribution">
         <p class="eyebrow">Distribution</p>
         <h2 class="section-title">Les rôles principaux</h2>
         <ul class="cast stack--wide" data-reveal-group>
@@ -145,15 +157,17 @@ const description = season.resume
             </li>
           ))}
         </ul>
+        {season.starringNotes.map((note) => <p class="note">{note}</p>)}
       </section>
     )
   }
 
   {
     season.episodes.length > 0 && (
-      <section class="page section">
+      <section class="page section" id="episodes">
         <p class="eyebrow">Guide des épisodes</p>
         <h2 class="section-title">Les {season.episodes.length} épisodes</h2>
+        <EpisodeIndex episodes={season.episodes} />
         <ol class="episodes stack--wide">
           {season.episodes.map((episode) => (
             <li class="episode" id={`episode-${episode.numero}`} data-reveal>
@@ -170,6 +184,7 @@ const description = season.resume
                     .join(' · ')}
                 </p>
                 {episode.resume && <p class="episode__resume">{episode.resume}</p>}
+                {episode.resumeSourceUrl && <p class="episode__source">Résumé adapté de <a href={episode.resumeSourceUrl} rel="noopener">TVmaze</a>.</p>}
                 {episode.images.length > 0 && (
                   <ul class="episode__images">
                     {episode.images.map((image) => (
@@ -184,7 +199,7 @@ const description = season.resume
                     ))}
                   </ul>
                 )}
-                {episode.casting && <p class="episode__cast">Avec {episode.casting}</p>}
+                {episode.casting && <p class="episode__cast">{episode.castingLabel ?? 'Avec'} {episode.casting}</p>}
                 {episode.notes.length > 0 && (
                   <details class="episode__notes">
                     <summary>À noter</summary>
@@ -193,28 +208,33 @@ const description = season.resume
                     ))}
                   </details>
                 )}
+                <a class="episode__return" href="#sommaire-episodes">Retour au sommaire ↑</a>
               </div>
             </li>
           ))}
         </ol>
+        {season.episodes.some(e => e.resumeSourceUrl) && <p class="note">Les résumés crédités à TVmaze sont adaptés en français et publiés sous licence <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>. <a href="/resumes-complementaires.json">Consulter ces résumés et leurs sources</a>.</p>}
       </section>
     )
   }
 
   {
     season.photos.length > 0 && (
-      <section class="page section">
+      <section class="page section" id="photos">
         <p class="eyebrow">Images de la saison</p>
         <ul class="gallery stack" data-reveal-group>
-          {season.photos.map((image, i) => (
+          {season.photos.map((photo, i) => (
             <li data-reveal="clip">
               <Photo
-                src={image}
-                alt={`Scène de la saison ${season.number} de New York Police Judiciaire`}
+                src={photo.image}
+                alt={photo.episode
+                  ? `Saison ${season.number}, épisode ${photo.episode} : ${season.episodes.find(e => e.numero === photo.episode)?.titre ?? 'New York Police Judiciaire'}`
+                  : `Scène de la saison ${season.number} de New York Police Judiciaire`}
                 widths={[400, 700, 1000]}
                 sizes="(min-width: 64em) 24rem, (min-width: 40em) 45vw, 90vw"
                 loading={i < 2 ? 'eager' : 'lazy'}
               />
+              {photo.episode && <p class="note">Épisode {photo.episode}</p>}
             </li>
           ))}
         </ul>
